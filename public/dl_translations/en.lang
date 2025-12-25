@@ -34,3 +34,6 @@ modal.button.decline = Decline
 # Version Module
 module.version.version_update = Version Update
 module.version.new_version_toast_title = New Version: $modName$, v$modVersion$
+
+# Debug
+debug.title = - Debug -
