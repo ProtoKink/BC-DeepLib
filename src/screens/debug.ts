@@ -29,7 +29,7 @@ export class GuiDebug extends BaseSubscreen {
           type: 'dropdown',
           id: 'debug-incoming-filter-mode',
           label: 'Filter Mode',
-          description: 'Configure which incoming message types to show or hide. Include: only show these message types. Exclude: hide these message types.',
+          description: ['Configure which incoming message types to show or hide.', ElementCreate({tag: 'br'}), 'Include: only show these message types.', ElementCreate({tag: 'br'}), 'Exclude: hide these message types.'],
           optionsList: [{
             attributes: {
               value: 'include',
@@ -75,7 +75,7 @@ export class GuiDebug extends BaseSubscreen {
           type: 'dropdown',
           id: 'debug-outcoming-filter-mode',
           label: 'Filter Mode',
-          description: 'Configure which outcoming message types to show or hide. Include: only show these message types. Exclude: hide these message types.',
+          description: ['Configure which outcoming message types to show or hide.', ElementCreate({tag: 'br'}), 'Include: only show these message types.', ElementCreate({tag: 'br'}), 'Exclude: hide these message types.'],
           optionsList: [{
             attributes: {
               value: 'include',
@@ -121,6 +121,7 @@ export class GuiDebug extends BaseSubscreen {
           type: 'checkbox',
           id: 'debug-show-file-names',
           label: 'Show File Names',
+          description: 'Show the file name of the translation in the translation string.',
           setElementValue: () => {
             return this.module.debugSettings.showFileNames;
           },
