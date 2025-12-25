@@ -1,5 +1,5 @@
 
-import { Button, Checkbox, Dropdown, Input, Label, SettingElement } from '../base/elements_typings';
+import { SettingElement } from '../base/elements_typings';
 import { BaseSubscreen, deepLibLogger, SubscreenOptions } from '../deeplib';
 import { DebugModule } from '../modules/debug';
 
@@ -153,7 +153,7 @@ export class GuiDebug extends BaseSubscreen {
         }
       ],
       [
-        <Button>{
+        {
           type: 'button',
           id: 'test-deeplib-big-button',
           options: {
@@ -166,7 +166,7 @@ export class GuiDebug extends BaseSubscreen {
             deepLibLogger.info('Big Button Clicked');
           }
         },
-        <Button>{
+        {
           type: 'button',
           id: 'test-deeplib-small-button',
           options: {
@@ -178,7 +178,7 @@ export class GuiDebug extends BaseSubscreen {
             deepLibLogger.info('Small Button Clicked');
           }
         },
-        <Checkbox>{
+        {
           type: 'checkbox',
           id: 'test-deeplib-checkbox',
           label: 'Checkbox',
@@ -190,7 +190,7 @@ export class GuiDebug extends BaseSubscreen {
             deepLibLogger.info('Checkbox value:', val);
           },
         },
-        <Input>{
+        {
           type: 'text',
           id: 'test-deeplib-text-input',
           label: 'Input',
@@ -202,7 +202,7 @@ export class GuiDebug extends BaseSubscreen {
             deepLibLogger.info('Input value:', val);
           },
         },
-        <Input>{
+        {
           type: 'number',
           id: 'test-deeplib-number-input',
           label: 'Input',
@@ -214,7 +214,7 @@ export class GuiDebug extends BaseSubscreen {
             deepLibLogger.info('Input value:', val);
           },
         },
-        <Label>{
+        {
           type: 'label',
           id: 'test-deeplib-label',
           label: 'Label',
@@ -222,7 +222,7 @@ export class GuiDebug extends BaseSubscreen {
         }
       ],
       [
-        <Button>{
+        {
           type: 'button',
           id: 'test-deeplib-big-button2',
           options: {
@@ -235,7 +235,7 @@ export class GuiDebug extends BaseSubscreen {
             deepLibLogger.info('Big Button Clicked');
           }
         },
-        <Button>{
+        {
           type: 'button',
           id: 'test-deeplib-small-button2',
           options: {
@@ -247,7 +247,7 @@ export class GuiDebug extends BaseSubscreen {
             deepLibLogger.info('Small Button Clicked');
           }
         },
-        <Checkbox>{
+        {
           type: 'checkbox',
           id: 'test-deeplib-checkbox2',
           label: 'Checkbox',
@@ -259,7 +259,7 @@ export class GuiDebug extends BaseSubscreen {
             deepLibLogger.info('Checkbox value:', val);
           },
         },
-        <Input>{
+        {
           type: 'text',
           id: 'test-deeplib-text-input2',
           label: 'Input',
@@ -271,7 +271,7 @@ export class GuiDebug extends BaseSubscreen {
             deepLibLogger.info('Input value:', val);
           },
         },
-        <Input>{
+        {
           type: 'number',
           id: 'test-deeplib-number-input2',
           label: 'Input',
@@ -283,13 +283,13 @@ export class GuiDebug extends BaseSubscreen {
             deepLibLogger.info('Input value:', val);
           },
         },
-        <Label>{
+        {
           type: 'label',
           id: 'test-deeplib-label2',
           label: 'Label',
           description: 'This is a label',
         },
-        <Dropdown>{
+        {
           type: 'dropdown',
           id: 'test-deeplib-dropdown',
           label: 'Dropdown',
@@ -301,9 +301,6 @@ export class GuiDebug extends BaseSubscreen {
           setSettingValue(val: string) {
             deepLibLogger.info('Dropdown value:', val);
           },
-          options: {
-            width: 200,
-          }
         }
       ]];
   }
