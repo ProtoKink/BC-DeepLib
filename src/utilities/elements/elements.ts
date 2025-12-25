@@ -1,5 +1,5 @@
 import { Button, Checkbox, Custom, Dropdown, Input, Label } from '../../base/elements_typings';
-import { BaseSubscreen } from '../../deeplib';
+import { BaseSubscreen, domUtil } from '../../deeplib';
 import { deepMerge } from '../common';
 
 /**
@@ -116,12 +116,12 @@ function elementCreateCheckbox(options: Omit<Checkbox, 'type'>): HTMLLabelElemen
   } as HTMLOptions<'label'>, options.htmlOptions?.container));
 
   if (options.description) {
-    retElem.addEventListener('mouseover', () => {
-      elementSetTooltip(options.description || '');
+    retElem.addEventListener('mouseover', function (ev) {
+      tooltipMouseOver.call(this, ev, options.description || null);
     });
 
-    retElem.addEventListener('mouseout', () => {
-      elementSetTooltip('');
+    retElem.addEventListener('mouseout', function (ev) {
+      tooltipMouseOut.call(this, ev);
     });
   }
 
@@ -190,12 +190,12 @@ function elementCreateInput(options: Input): HTMLLabelElement {
   } as HTMLOptions<'label'>, options.htmlOptions?.container));
 
   if (options.description) {
-    retElem.addEventListener('mouseover', () => {
-      elementSetTooltip(options.description || '');
+    retElem.addEventListener('mouseover', function (ev) {
+      tooltipMouseOver.call(this, ev, options.description || null);
     });
 
-    retElem.addEventListener('mouseout', () => {
-      elementSetTooltip('');
+    retElem.addEventListener('mouseout', function (ev) {
+      tooltipMouseOut.call(this, ev);
     });
   }
 
@@ -223,12 +223,12 @@ function elementCreateLabel(options: Omit<Label, 'type'>): HTMLLabelElement {
   } as HTMLOptions<'label'>, options.htmlOptions));
 
   if (options.description) {
-    retElem.addEventListener('mouseover', () => {
-      elementSetTooltip(options.description || '');
+    retElem.addEventListener('mouseover', function (ev) {
+      tooltipMouseOver.call(this, ev, options.description || null);
     });
 
-    retElem.addEventListener('mouseout', () => {
-      elementSetTooltip('');
+    retElem.addEventListener('mouseout', function (ev) {
+      tooltipMouseOut.call(this, ev);
     });
   }
 
@@ -270,11 +270,11 @@ function elementCreateDropdown(options: Omit<Dropdown, 'type'>): HTMLLabelElemen
       ),
     ],
     eventListeners: {
-      mouseover: function () {
-        elementSetTooltip(options.description ?? '');
+      mouseover: function (ev) {
+        tooltipMouseOver.call(this, ev, options.description || null);
       },
-      mouseout: function () {
-        elementSetTooltip('');
+      mouseout: function (ev) {
+        tooltipMouseOut.call(this, ev);
       }
     }
   } as HTMLOptions<'label'>, options.htmlOptions?.container));
@@ -287,13 +287,13 @@ function elementCreateDropdown(options: Omit<Dropdown, 'type'>): HTMLLabelElemen
 function elementCreateTooltip() {
   const element = ElementCreate({
     tag: 'div',
-    classList: ['deeplib-tooltip'],
+    classList: ['deeplib-tooltip', 'anchor-bottom'],
     attributes: {
       id: 'deeplib-tooltip'
     },
     style: {
       display: 'none'
-    }
+    },
   });
 
   return element;
@@ -303,16 +303,68 @@ function elementGetTooltip() {
   return document.getElementById('deeplib-tooltip') ?? undefined;
 }
 
-function elementSetTooltip(text: string) {
+function tooltipMouseOver(this: HTMLElement, _ev: MouseEvent, description: ElementButton.StaticNode) {
+  const elementRect = this.getBoundingClientRect();
+  
+  elementSetTooltip(description, 'bottom');
+  
+  const tooltipElement = elementGetTooltip();
+  if (tooltipElement) {
+    // Force a reflow to ensure tooltip is rendered and positioned
+    void tooltipElement.offsetHeight;
+    
+    const tooltipRect = tooltipElement.getBoundingClientRect();
+    
+    const overlaps = domUtil.doRectsOverlap(elementRect, tooltipRect);
+    
+    // If tooltip covers the element, move it to top
+    const position = overlaps ? 'top' : 'bottom';
+    if (position === 'top') {
+      elementSetTooltipPosition('top');
+    }
+  }
+}
+
+function tooltipMouseOut(this: HTMLElement, _ev: MouseEvent) {
+  elementSetTooltip(null);
+}
+
+function elementSetTooltip(text: ElementButton.StaticNode, position: 'top' | 'bottom' = 'bottom') {
   const element = document.getElementById('deeplib-tooltip');
 
   if (!element) return false;
 
-  element.innerHTML = text;
-  if (text === '') element.style.display = 'none';
-  else element.style.display = '';
+  elementSetTooltipPosition(position);
+
+  const nodes = (() => {
+    if (text === null || text === undefined) return null;
+    else if (CommonIsObject(text) && 'tag' in text) return [ElementCreate(text)] as HTMLElement[];
+    else if (CommonIsArray(text)) return text.map(i => {
+      if (CommonIsObject(i) && 'tag' in i) return ElementCreate(i) as HTMLElement;
+      else if (typeof i === 'string' || (CommonIsObject(text) && 'tag' in text) || i instanceof HTMLElement) return i;
+      else return null;
+    }).filter(i => i !== null) as (HTMLElement | string)[];
+    else if (typeof text === 'string') return [text];
+    else return null;
+  })();
+
+  if (nodes === null) {
+    element.childNodes.forEach(i => i.remove());
+    element.style.display = 'none';
+    return true;
+  }
+
+  element.replaceChildren(...nodes);
+  element.style.display = '';
 
   return true;
+}
+
+function elementSetTooltipPosition(position: 'top' | 'bottom') {
+  const element = document.getElementById('deeplib-tooltip');
+  if (!element) return false;
+  element.classList.toggle('anchor-bottom', position === 'bottom');
+  element.classList.toggle('anchor-top', position === 'top');
 }
 
 interface PrevNext {

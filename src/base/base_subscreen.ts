@@ -419,8 +419,7 @@ export abstract class BaseSubscreen {
     ElementSetPosition('deeplib-nav-menu', 1905, 75, 'top-right');
     ElementSetSize('deeplib-nav-menu', null, 90);
 
-    ElementSetPosition(advElement.getTooltip() || '', 250, 850);
-    ElementSetSize(advElement.getTooltip() || '', 1500, 70);
+    ElementSetSize(advElement.getTooltip() || '', 1500);
 
     BaseSubscreen.currentElements.forEach((item) => {
       const element = item[0];

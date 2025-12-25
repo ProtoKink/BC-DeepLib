@@ -18,7 +18,7 @@ export type Button = Prettify<{
 export type Checkbox = Prettify<{
   type: 'checkbox';
   label?: string;
-  description?: string;
+  description?: ElementButton.StaticNode;
   setElementValue?: () => boolean;
   setSettingValue?: (val: boolean) => void;
   htmlOptions?: Partial<Record<'container' | 'checkbox' | 'label', Omit<HTMLOptions<any>, 'tag'>>> | null | undefined;
@@ -27,7 +27,7 @@ export type Checkbox = Prettify<{
 export type Input = Prettify<{
   type: 'text' | 'number' | 'color';
   label?: string;
-  description?: string;
+  description?: ElementButton.StaticNode;
   setElementValue?: () => string;
   setSettingValue?: (val: string) => void;
   htmlOptions?: Partial<Record<'container' | 'input' | 'label', Omit<HTMLOptions<any>, 'tag'>>> | null | undefined;
@@ -37,7 +37,7 @@ export type Dropdown = Prettify<{
   id: Parameters<typeof ElementCreateDropdown>[0];
   type: 'dropdown';
   label?: string;
-  description?: string;
+  description?: ElementButton.StaticNode;
   optionsList: Parameters<typeof ElementCreateDropdown>[1];
   setElementValue?: () => string;
   setSettingValue?: (val: string) => void;
@@ -52,7 +52,7 @@ export type Dropdown = Prettify<{
 export type Label = Prettify<{
   type: 'label';
   label?: string;
-  description?: string;
+  description?: ElementButton.StaticNode;
   htmlOptions?: Omit<HTMLOptions<any>, 'tag'>;
 } & BaseElementModel>;
 

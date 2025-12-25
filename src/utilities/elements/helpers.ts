@@ -33,7 +33,13 @@ export const domUtil = {
    * and specifically if there is vertical or horizontal overflow.
    * Returns null if the element is not found.
    */
-  hasOverflow: hasOverflow
+  hasOverflow: hasOverflow,
+
+  /**
+   * Checks if two rectangles overlap.
+   * Returns true if the rectangles overlap, false otherwise.
+   */
+  doRectsOverlap: doRectsOverlap
 };
 
 function autoSetPosition(_: ElementHelp.ElementOrId, position: SettingElement['position']) {
@@ -97,4 +103,13 @@ function hasOverflow(el: ElementHelp.ElementOrId): { any: boolean, vertical: boo
     vertical,
     horizontal,
   };
+}
+
+function doRectsOverlap(rect1: DOMRect, rect2: DOMRect): boolean {
+  return !(
+    rect1.right < rect2.left ||
+    rect1.left > rect2.right ||
+    rect1.bottom < rect2.top ||
+    rect1.top > rect2.bottom
+  );
 }

@@ -54,6 +54,20 @@
   font-size: 0.8em;
   border: min(0.2vh, 0.1vw) solid var(--deeplib-border-color);
   z-index: 1;
+
+  &.anchor-top {
+    position: absolute;
+    top: min(1vh, 0.5vw);
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  &.anchor-bottom {
+    position: absolute;
+    bottom: min(1vh, 0.5vw);
+    left: 50%;
+    transform: translateX(-50%);
+  }
 }
 
 .deeplib-overflow-box {
