@@ -202,7 +202,7 @@ export class MainMenu extends BaseSubscreen {
       layout.appendToMiscDiv(storageFullnessWrapper);
     }
 
-    if (IS_DEBUG) {
+    if (IS_DEBUG || getModule('DebugModule')) {
       const debugButton = advElement.createButton({
         id: 'deeplib-debug-button',
         onClick: () => {
