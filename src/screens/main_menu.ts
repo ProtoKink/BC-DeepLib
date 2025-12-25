@@ -77,7 +77,7 @@ export class MainMenu extends BaseSubscreen {
 
     const menu = document.getElementById('deeplib-nav-menu');
     if (menu) {
-      ElementMenu.AppendButton(menu, exitButton);
+      menu.append(exitButton);
     }
 
     for (const screen of this.subscreens) {
@@ -214,7 +214,7 @@ export class MainMenu extends BaseSubscreen {
         }
       });
       if (menu) {
-        ElementMenu.PrependItem(menu, debugButton);
+        menu.prepend(debugButton);
       }
     }
   }
