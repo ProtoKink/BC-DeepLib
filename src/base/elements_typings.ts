@@ -1,5 +1,7 @@
 export type SettingElement = Button | Checkbox | Input | Label | Dropdown | Custom;
 
+type ElementFlexDirection = 'row' | 'column' | 'rowReverse' | 'columnReverse';
+
 export type BaseElementModel = {
   id: string;
   size?: Thunk<[width: number | null, height: number | null]>;
@@ -22,6 +24,9 @@ export type Checkbox = Prettify<{
   setElementValue?: () => boolean;
   setSettingValue?: (val: boolean) => void;
   htmlOptions?: Partial<Record<'container' | 'checkbox' | 'label', Omit<HTMLOptions<any>, 'tag'>>> | null | undefined;
+  options?: {
+    direction?: ElementFlexDirection;
+  }
 } & BaseElementModel>;
 
 export type Input = Prettify<{
@@ -31,6 +36,9 @@ export type Input = Prettify<{
   setElementValue?: () => string;
   setSettingValue?: (val: string) => void;
   htmlOptions?: Partial<Record<'container' | 'input' | 'label', Omit<HTMLOptions<any>, 'tag'>>> | null | undefined;
+  options?: {
+    direction?: ElementFlexDirection;
+  }
 } & BaseElementModel>;
 
 export type Dropdown = Prettify<{
@@ -41,7 +49,9 @@ export type Dropdown = Prettify<{
   optionsList: Parameters<typeof ElementCreateDropdown>[1];
   setElementValue?: () => string;
   setSettingValue?: (val: string) => void;
-  options?: Parameters<typeof ElementCreateDropdown>[3];
+  options?: Parameters<typeof ElementCreateDropdown>[3] & {
+    direction?: ElementFlexDirection;
+  };
   htmlOptions?: {
     container?: Partial<Omit<HTMLOptions<any>, 'tag'>>
     select?: Parameters<typeof ElementCreateDropdown>[4];

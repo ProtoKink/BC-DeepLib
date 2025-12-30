@@ -83,7 +83,7 @@ function elementCreateCheckbox(options: Omit<Checkbox, 'type'>): HTMLLabelElemen
 
   const retElem = ElementCreate(deepMerge({
     tag: 'label',
-    classList: ['deeplib-checkbox-container'],
+    classList: ['deeplib-checkbox-container', options?.options?.direction ?? undefined],
     attributes: {
       id: `${options.id}-container`,
       for: options.id,
@@ -156,7 +156,7 @@ function elementCreateInput(options: Input): HTMLLabelElement {
 
   const retElem = ElementCreate(deepMerge({
     tag: 'label',
-    classList: ['deeplib-input-container'],
+    classList: ['deeplib-input-container', options?.options?.direction ?? undefined],
     attributes: {
       id: `${options.id}-container`,
       for: options.id,
@@ -247,7 +247,7 @@ function elementCreateDropdown(options: Omit<Dropdown, 'type'>): HTMLLabelElemen
 
   const retElem = ElementCreate(deepMerge({
     tag: 'label',
-    classList: ['deeplib-dropdown-container'],
+    classList: ['deeplib-dropdown-container', options?.options?.direction ?? undefined],
     attributes: {
       id: `${options.id}-container`,
       for: options.id,

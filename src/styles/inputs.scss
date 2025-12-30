@@ -88,3 +88,23 @@
     user-select: none;
   }
 }
+
+.deeplib-checkbox-container,
+.deeplib-input-container,
+.deeplib-dropdown-container {
+  &.row {
+    flex-direction: row;
+  }
+
+  &.column {
+    flex-direction: column;
+  }
+
+  &.rowReverse {
+    flex-direction: row-reverse;
+  }
+
+  &.columnReverse {
+    flex-direction: column-reverse;
+  }
+}
