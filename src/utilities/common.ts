@@ -37,7 +37,8 @@ export function deepMerge<T, U>(
 
   if (isPlainObject(target) && isPlainObject(source)) {
     const result: PlainObject = { ...target };
-    const keys = options.matchingOnly
+    const targetIsEmpty = Object.keys(target).length === 0;
+    const keys = options.matchingOnly && !targetIsEmpty
       ? Object.keys(source).filter(k => k in target)
       : Object.keys(source);
 
