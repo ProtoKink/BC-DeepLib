@@ -83,12 +83,20 @@ function elementCreateCheckbox(options: Omit<Checkbox, 'type'>): HTMLLabelElemen
 
   const retElem = ElementCreate(deepMerge({
     tag: 'label',
-    classList: ['deeplib-checkbox-container', options?.options?.direction ?? undefined],
+    classList: ['deeplib-checkbox-container', options?.options?.direction ?? 'rowReverse'],
     attributes: {
       id: `${options.id}-container`,
       for: options.id,
     },
     children: [
+      deepMerge({
+        tag: 'span',
+        classList: ['deeplib-text'],
+        attributes: {
+          id: `${options.id}-label`,
+        },
+        children: [options.label]
+      } as HTMLOptions<'span'>, options.htmlOptions?.label),
       deepMerge({
         tag: 'input',
         classList: ['checkbox', 'deeplib-input'],
@@ -104,14 +112,6 @@ function elementCreateCheckbox(options: Omit<Checkbox, 'type'>): HTMLLabelElemen
           }
         }
       } as HTMLOptions<'input'>, options.htmlOptions?.checkbox),
-      deepMerge({
-        tag: 'span',
-        classList: ['deeplib-text'],
-        attributes: {
-          id: `${options.id}-label`,
-        },
-        children: [options.label]
-      } as HTMLOptions<'span'>, options.htmlOptions?.label),
     ],
   } as HTMLOptions<'label'>, options.htmlOptions?.container));
 
@@ -162,6 +162,14 @@ function elementCreateInput(options: Input): HTMLLabelElement {
       for: options.id,
     },
     children: [
+      options.label ? deepMerge({
+        tag: 'span',
+        classList: ['deeplib-text'],
+        attributes: {
+          id: `${options.id}-label`,
+        },
+        children: [options.label]
+      } as HTMLOptions<'span'>, options.htmlOptions?.label) : undefined,
       deepMerge({
         tag: 'input',
         classList: ['deeplib-input'],
@@ -178,14 +186,6 @@ function elementCreateInput(options: Input): HTMLLabelElement {
           }
         }
       } as HTMLOptions<'input'>, options.htmlOptions?.input),
-      options.label ? deepMerge({
-        tag: 'span',
-        classList: ['deeplib-text'],
-        attributes: {
-          id: `${options.id}-label`,
-        },
-        children: [options.label]
-      } as HTMLOptions<'span'>, options.htmlOptions?.label) : undefined,
     ],
   } as HTMLOptions<'label'>, options.htmlOptions?.container));
 
