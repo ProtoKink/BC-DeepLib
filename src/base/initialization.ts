@@ -71,40 +71,42 @@ export let MOD_NAME: string;
  *  - Injecting required styles
  *  - Delaying initialization until login (if necessary)
  */
-export function initMod(options: InitOptions) {
+export async function initMod(options: InitOptions) {
   const url = 'https://cdn.jsdelivr.net/npm/bondage-club-mod-sdk@1.2.0/+esm';
 
-  import(`${url}`).then(() => {
-    sdk = new ModSdkManager({
-      name: options.modName,
-      fullName: options.modName,
-      version: MOD_VERSION,
-      repository: options.modRepository
-    });
-    MOD_NAME = options.modName;
+  if (!(window as any).bcModSdk) {
+    await import(`${url}`);
+  }
 
-    modStorage = new ModStorage(options.modName);
-    modLogger = new Logger(MOD_NAME);
-    Style.injectInline('deeplib-style', deeplib_style);
-
-    modLogger.debug('Init wait');
-    if (!CurrentScreen || CurrentScreen === 'Login') {
-      options.beforeLogin?.();
-      const removeHook = sdk.hookFunction('LoginResponse', 0, (args, next) => {
-        modLogger.debug('Init! LoginResponse caught: ', args);
-        next(args);
-        const response = args[0];
-        if (response === 'InvalidNamePassword') return next(args);
-        if (response && typeof response.Name === 'string' && typeof response.AccountName === 'string') {
-          init(options);
-          removeHook();
-        }
-      });
-    } else {
-      modLogger.debug(`Already logged in, initing ${MOD_NAME}`);
-      init(options);
-    }
+  sdk = new ModSdkManager({
+    name: options.modName,
+    fullName: options.modName,
+    version: MOD_VERSION,
+    repository: options.modRepository
   });
+  MOD_NAME = options.modName;
+
+  modStorage = new ModStorage(options.modName);
+  modLogger = new Logger(MOD_NAME);
+  Style.injectInline('deeplib-style', deeplib_style);
+
+  modLogger.debug('Init wait');
+  if (!CurrentScreen || CurrentScreen === 'Login') {
+    options.beforeLogin?.();
+    const removeHook = sdk.hookFunction('LoginResponse', 0, (args, next) => {
+      modLogger.debug('Init! LoginResponse caught: ', args);
+      next(args);
+      const response = args[0];
+      if (response === 'InvalidNamePassword') return next(args);
+      if (response && typeof response.Name === 'string' && typeof response.AccountName === 'string') {
+        init(options);
+        removeHook();
+      }
+    });
+  } else {
+    modLogger.debug(`Already logged in, initing ${MOD_NAME}`);
+    init(options);
+  }
 }
 
 
