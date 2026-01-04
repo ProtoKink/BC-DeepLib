@@ -1,5 +1,5 @@
 import deeplib_style from '../styles/index.scss';
-import { ModSdkManager, Localization, modules, registerModule, Style, ModStorage, MainMenuOptions, MainMenu, TranslationOptions, Logger, VersionModule, ModuleKey, tryCatch, ModulesList, getModule } from '../deeplib';
+import { ModSdkManager, Localization, modules, registerModule, Style, ModStorage, MainMenuOptions, MainMenu, TranslationOptions, Logger, VersionModule, ModuleKey, tryCatch, ModulesList, getModule, tryCatchAsync } from '../deeplib';
 import { DebugModule } from '../modules/debug';
 
 /** Configuration object for initializing a mod via `initMod`. */
@@ -126,9 +126,19 @@ export async function initMod(options: InitOptions) {
 async function init(options: InitOptions) {
   if ((window as any)[options.modName + 'Loaded']) return;
 
-  modStorage.load();
+  const storageRes = tryCatch(() => {
+    modStorage.load();
+  }, e => e as Error);
+  if (!storageRes.ok) {
+    modLogger.error(storageRes.error);
+  }
 
-  await Localization.init(options.translationOptions);
+  const localizationRes = await tryCatchAsync(async () => {
+    await Localization.init(options.translationOptions);
+  }, e => e as Error);
+  if (!localizationRes.ok) {
+    modLogger.error(localizationRes.error);
+  }
 
   const optionModules = Object.entries(options.modules ?? {}) as [ModuleKey, ModulesList[ModuleKey]][];
   const modulesToRegister: [ModuleKey, ModulesList[ModuleKey]][] = [];
