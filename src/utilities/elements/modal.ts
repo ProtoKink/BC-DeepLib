@@ -92,9 +92,6 @@ export class Modal<T extends string = string> {
         'aria-modal': 'true',
         'aria-labelledby': promptId
       },
-      style: {
-        fontFamily: CommonGetFontName()
-      },
       children: [
         {
           tag: 'div',
@@ -116,6 +113,7 @@ export class Modal<T extends string = string> {
         this.renderButtons()
       ]
     });
+    ElementSetFontSize(this.dialog, 'auto');
 
     this.blocker = this.createBlocker();
 

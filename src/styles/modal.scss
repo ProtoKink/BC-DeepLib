@@ -10,7 +10,7 @@
   align-items: center;
   gap: 0.5em;
   width: max(50dvw, 25dvh);
-  font-size: min(4dvh, 2dvw);
+  font-size: 1em;
   padding: min(2dvh, 1dvw);
   background-color: var(--deeplib-element-color);
   border-radius: min(1.2dvh, 0.6dvw);
@@ -19,7 +19,7 @@
 
   .deeplib-modal-input {
     width: 100%;
-    font-size: min(2.6dvh, 1.8dvw);
+    font-size: 1em;
     border-radius: min(1.0dvh, 0.5dvw);
     padding: min(1dvh, 0.5dvw);
   }
