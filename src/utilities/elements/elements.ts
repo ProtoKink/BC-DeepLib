@@ -89,14 +89,14 @@ function elementCreateCheckbox(options: Omit<Checkbox, 'type'>): HTMLLabelElemen
       for: options.id,
     },
     children: [
-      deepMerge({
+      options.label ? deepMerge({
         tag: 'span',
         classList: ['deeplib-text'],
         attributes: {
           id: `${options.id}-label`,
         },
         children: [options.label]
-      } as HTMLOptions<'span'>, options.htmlOptions?.label),
+      } as HTMLOptions<'span'>, options.htmlOptions?.label) : undefined,
       deepMerge({
         tag: 'input',
         classList: ['checkbox', 'deeplib-input'],
