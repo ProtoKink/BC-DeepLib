@@ -73,6 +73,7 @@ function elementCreateButton(options: Omit<Button, 'type'>): HTMLButtonElement {
 };
 
 function elementCreateCheckbox(options: Omit<Checkbox, 'type'>): HTMLLabelElement {
+  options.id ??= ElementGenerateID();
   const elem = document.getElementById(options.id) as HTMLLabelElement;
 
   if (elem) return elem;
@@ -148,6 +149,7 @@ function elementCreateCustom(options: Omit<Custom, 'type'>) {
 }
 
 function elementCreateInput(options: Input): HTMLLabelElement {
+  options.id ??= ElementGenerateID();
   const elem = document.getElementById(options.id) as HTMLLabelElement;
 
   if (elem) return elem;
@@ -205,6 +207,7 @@ function elementCreateInput(options: Input): HTMLLabelElement {
 }
 
 function elementCreateLabel(options: Omit<Label, 'type'>): HTMLLabelElement {
+  options.id ??= ElementGenerateID();
   const elem = document.getElementById(options.id) as HTMLLabelElement;
 
   if (elem) return elem;
@@ -368,7 +371,7 @@ function elementSetTooltipPosition(position: 'top' | 'bottom') {
 }
 
 interface PrevNext {
-  id: string,
+  id: string | null,
   initialLabel?: string
   back: (arg0: PrevNextCallbacks) => void,
   initialPrevTooltip?: string,
@@ -383,6 +386,7 @@ interface PrevNextCallbacks {
 }
 
 function elementPrevNext(options: PrevNext) {
+  options.id ??= ElementGenerateID();
   const elem = document.getElementById(options.id);
 
   if (elem) return elem;

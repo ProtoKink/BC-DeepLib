@@ -3,7 +3,7 @@ export type SettingElement = Button | Checkbox | Input | Label | Dropdown | Cust
 type ElementFlexDirection = 'row' | 'column' | 'rowReverse' | 'columnReverse';
 
 export type BaseElementModel = {
-  id: string;
+  id: string | null;
   size?: Thunk<[width: number | null, height: number | null]>;
   position?: Thunk<[x: number, y: number, anchor?: ElementHelp.AnchorXY]>;
   disabled?: Thunk<boolean>;
