@@ -1,21 +1,22 @@
 .deeplib-modal {
   position: fixed;
-  top: 10%;
+  top: 50%;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%);
   z-index: 1001;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 0.5em;
-  width: max(50dvw, 25dvh);
+  min-width: max(50dvw, 25dvh);
   font-size: 1em;
   padding: min(2dvh, 1dvw);
   background-color: var(--deeplib-element-color);
   border-radius: min(1.2dvh, 0.6dvw);
   border: min(0.2dvh, 0.1dvw) solid var(--deeplib-border-color);
   color: var(--deeplib-text-color);
+  max-width: max(90dvw, 45dvh);
 
   .deeplib-modal-input {
     width: 100%;
