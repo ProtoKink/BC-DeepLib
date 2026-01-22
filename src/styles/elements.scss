@@ -18,6 +18,12 @@
   color: var(--deeplib-text-color);
 }
 
+.deeplib-label {
+  color: var(--deeplib-text-color);
+  user-select: none;
+  pointer-events: none;
+}
+
 .deeplib-subscreen {
   padding: 0;
   margin: 0;
