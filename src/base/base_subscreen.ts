@@ -346,6 +346,7 @@ export abstract class BaseSubscreen {
             element = advElement.createDropdown(item);
             break;
         }
+        if (element.parentElement && element.parentElement !== settingsElement) return;
         layout.appendToSettingsDiv(element);
       })
     );
