@@ -190,6 +190,13 @@ export class Localization {
  * then falls back to the library translation,
  * and if neither exist, returns the source tag itself.
  */
-export const getText = (srcTag: string): string => {
-  return Localization.getTextMod(srcTag) || Localization.getTextLib(srcTag) || srcTag;
+export const getText = (srcTag: string, replacements?: Record<string, string | number | boolean>): string => {
+  const text = Localization.getTextMod(srcTag) || Localization.getTextLib(srcTag) || srcTag;
+
+  if (replacements) {
+    const allStringReplacements = Object.fromEntries(Object.entries(replacements).map(([key, value]) => [key, value.toString()]));
+    return CommonStringPartitionReplace(text, allStringReplacements).join('');
+  }
+
+  return text;
 };

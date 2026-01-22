@@ -173,13 +173,13 @@ export class MainMenu extends BaseSubscreen {
         options: {
           tooltipPosition: 'left',
           noStyling: true,
-          tooltip: CommonStringPartitionReplace(getText('mainmenu.meter.storage_hint'), {
-            $percentage$: `${fullness}`
-          }).join(''),
-          label: CommonStringPartitionReplace(getText('mainmenu.meter.storage_label'), {
-            $currentCapacity$: `${currentStorageCapacityKB}`,
-            $maxCapacity$: `${maxStorageCapacityKB}`,
-          }).join(''),
+          tooltip: getText('mainmenu.meter.storage_hint', {
+            $percentage$: fullness
+          }),
+          label: getText('mainmenu.meter.storage_label', {
+            $currentCapacity$: currentStorageCapacityKB,
+            $maxCapacity$: maxStorageCapacityKB,
+          }),
         },
         htmlOptions: {
           button: {

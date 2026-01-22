@@ -187,10 +187,10 @@ export abstract class BaseSubscreen {
   }
 
   getPageLabel(): string {
-    return CommonStringPartitionReplace(getText('settings.page.label'), {
-      $currentPage$: `${BaseSubscreen.currentPage}`,
-      $totalPages$: `${this.pageStructure.length}`,
-    }).join('');
+    return getText('settings.page.label', {
+      $currentPage$: BaseSubscreen.currentPage,
+      $totalPages$: this.pageStructure.length,
+    });
   }
 
   /**
@@ -296,7 +296,9 @@ export abstract class BaseSubscreen {
     if (this.options.doShowTitle) {
       const subscreenTitle = advElement.createLabel({
         id: 'deeplib-subscreen-title',
-        label: getText(`${this.options.name}.title`).replace('$ModVersion', MOD_VERSION_CAPTION),
+        label: getText(`${this.options.name}.title`, { 
+          '$ModVersion': MOD_VERSION_CAPTION 
+        }),
       });
       layout.appendToSubscreen(subscreenTitle);
     }

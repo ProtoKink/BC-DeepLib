@@ -144,10 +144,10 @@ export class VersionModule extends BaseModule {
     });
 
     const beepIdx = beepLogLength - 1;
-    const title = CommonStringPartitionReplace(getText('module.version.new_version_toast_title'), {
+    const title = getText('module.version.new_version_toast_title', {
       $modName$: MOD_NAME,
       $modVersion$: VersionModule.version
-    }).join('');
+    });
     const data = FriendListBeepLog[beepIdx];
 
     ServerShowBeep(VersionModule.newVersionMessage, 10000, {
