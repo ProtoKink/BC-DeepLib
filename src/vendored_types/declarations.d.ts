@@ -52,3 +52,10 @@ declare const IS_DEVEL: boolean;
  * `true` when mod is built with `--debug`/`-d`.
  */
 declare const IS_DEBUG: boolean;
+
+/**
+ * The current Deeplib version.
+ * 
+ * This value is set at build time and configured via `version` field in the `package.json` file of this package.
+ */
+declare const DEEPLIB_VERSION: string;

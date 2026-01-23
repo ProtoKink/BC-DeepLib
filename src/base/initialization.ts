@@ -88,7 +88,7 @@ export async function initMod(options: InitOptions) {
 
   modStorage = new ModStorage(options.modName);
   modLogger = new Logger(MOD_NAME);
-  Style.injectInline('deeplib-style', deeplib_style);
+  Style.injectInline(`deeplib-style-${DEEPLIB_VERSION}`, deeplib_style);
 
   modLogger.debug('Init wait');
   if (!CurrentScreen || CurrentScreen === 'Login') {
