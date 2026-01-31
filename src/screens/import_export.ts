@@ -166,14 +166,10 @@ export class GuiImportExport extends BaseSubscreen {
       ? this.importExportOptions.customFileExtension
       : '.' + this.importExportOptions.customFileExtension;
 
-    const suggestedName = defaultFileName.endsWith(CUSTOM_EXTENSION)
-      ? defaultFileName
-      : defaultFileName + CUSTOM_EXTENSION;
-
     if ('showSaveFilePicker' in window) {
       try {
         const handle = await (window as any).showSaveFilePicker({
-          suggestedName: suggestedName,
+          suggestedName: defaultFileName + CUSTOM_EXTENSION,
           types: [
             {
               description: 'Custom Data Files',
@@ -190,7 +186,7 @@ export class GuiImportExport extends BaseSubscreen {
         throw new Error('File save cancelled or failed: ' + error.message);
       }
     } else {
-      const fileName = await Modal.prompt('Enter file name', { defaultValue: suggestedName });
+      const fileName = await Modal.prompt('Enter file name', { defaultValue: defaultFileName });
 
       if (fileName === null) {
         return false;
@@ -203,7 +199,7 @@ export class GuiImportExport extends BaseSubscreen {
         tag: 'a',
         attributes: {
           href: URL.createObjectURL(blob),
-          download: fileName.endsWith(CUSTOM_EXTENSION) ? fileName : fileName + CUSTOM_EXTENSION
+          download: fileName + CUSTOM_EXTENSION
         },
       });
 
