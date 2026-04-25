@@ -123,7 +123,6 @@ export abstract class BaseSubscreen {
   protected static readonly subscreenOptions: SubscreenOptions = {
     drawCharacter: true,
     name: 'UNKNOWN',
-    icon: '',
     background: 'Sheet',
     doShowExitButton: true,
     doShowTitle: true,
