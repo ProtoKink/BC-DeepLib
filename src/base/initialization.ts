@@ -93,20 +93,10 @@ export async function initMod(options: InitOptions) {
   modLogger.debug('Init wait');
   if (!CurrentScreen || CurrentScreen === 'Login') {
     options.beforeLogin?.();
-    const removeHook = sdk.hookFunction('LoginResponse', 0, (args, next) => {
-      modLogger.debug('Init! LoginResponse caught: ', args);
-      next(args);
-      const response = args[0];
-      if (response === 'InvalidNamePassword') return next(args);
-      if (response && typeof response.Name === 'string' && typeof response.AccountName === 'string') {
-        init(options);
-        removeHook();
-      }
-    });
-  } else {
-    modLogger.debug(`Already logged in, initing ${MOD_NAME}`);
-    init(options);
   }
+
+  await ServerIsLoggedInAsync();
+  init(options);
 }
 
 
