@@ -1,4 +1,4 @@
-import { BaseModule, BaseSettingsModel, GUI, advElement, domUtil, getText, layout, modules, modStorage, exportToGlobal } from '../deeplib';
+import { BaseModule, BaseSettingsModel, GUI, advElement, domUtil, getText, layout, modules, modStorage, exportToGlobal, MOD_NAME } from '../deeplib';
 import { SettingElement } from './elements_typings';
 
 /** Optional configuration flags for a `BaseSubscreen` instance. */
@@ -87,7 +87,7 @@ export async function setSubscreen(subscreen: BaseSubscreen | string) {
     throw new Error('Attempt to set subscreen before init');
   }
   const screenName = typeof subscreen === 'string' ? subscreen : subscreen?.options.name;
-  const screenId = `${BaseSubscreen.id}_${screenName}`;
+  const screenId = `${MOD_NAME}_${screenName}`;
 
   await CommonSetScreen(...['DeepLibMod', `${screenId}`] as unknown as ScreenSpecifier);
 }
@@ -142,7 +142,7 @@ export abstract class BaseSubscreen {
     };
 
     const screenName = this.options.name;
-    const screenId = `${BaseSubscreen.id}_${screenName}`;
+    const screenId = `${MOD_NAME}_${screenName}`;
 
     exportToGlobal(`${screenId}Load`, this.load.bind(this));
     exportToGlobal(`${screenId}Run`, this.run.bind(this));
