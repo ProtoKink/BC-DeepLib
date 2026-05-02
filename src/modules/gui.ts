@@ -40,9 +40,9 @@ export class GUI extends BaseModule {
   static instance: GUI | null = null;
 
   /** All subscreens managed by this GUI, including the main menu and module settings screens. */
-  private _subscreens: BaseSubscreen[];
+  private _subscreens: BaseSubscreen[] = [];
   /** The mod's main menu screen. */
-  private _mainMenu: MainMenu;
+  private _mainMenu: MainMenu | null = null;
   /** Options defining how the mod's settings button is displayed and behaves. */
   private _modButtonOptions: GuiOptions | null;
 
@@ -52,7 +52,7 @@ export class GUI extends BaseModule {
   }
 
   /** Returns the main menu subscreen instance. */
-  get mainMenu(): MainMenu {
+  get mainMenu(): MainMenu | null {
     return this._mainMenu;
   }
 
@@ -71,8 +71,6 @@ export class GUI extends BaseModule {
       if (!module.settingsScreen) continue;
     }
 
-    this._mainMenu = guiOptions?.mainMenu ? new guiOptions.mainMenu(this) : new MainMenu(this);
-    this._subscreens = [this._mainMenu];
     this._modButtonOptions = guiOptions;
 
     GUI.instance = this;
@@ -87,6 +85,10 @@ export class GUI extends BaseModule {
    */
   load(): void {
     if (!this._modButtonOptions) return;
+
+    const guiOptions = this._modButtonOptions;
+    this._mainMenu = guiOptions?.mainMenu ? new guiOptions.mainMenu(this) : new MainMenu(this);
+    this._subscreens = [this._mainMenu];
     
     for (const module of modules()) {
       if (!module.settingsScreen) continue;
@@ -101,6 +103,7 @@ export class GUI extends BaseModule {
       ButtonText: this._modButtonOptions.buttonText,
       Image: this._modButtonOptions.image,
       load: async () => {
+        if (!this._mainMenu) return;
         await setSubscreen(this._mainMenu);
       },
       run: () => {},
