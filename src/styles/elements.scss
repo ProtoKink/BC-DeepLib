@@ -114,7 +114,9 @@
   z-index: 1;
 
   &>.deeplib-button {
-    flex: 1 0 auto;
+    flex: 1 1 auto;
+    height: 100%;
+    aspect-ratio: 1;
   }
 }
 
