@@ -72,12 +72,6 @@ export let MOD_NAME: string;
  *  - Delaying initialization until login (if necessary)
  */
 export async function initMod(options: InitOptions) {
-  const url = 'https://cdn.jsdelivr.net/npm/bondage-club-mod-sdk@1.2.0/+esm';
-
-  if (!(window as any).bcModSdk) {
-    await import(`${url}`);
-  }
-
   sdk = new ModSdkManager({
     name: options.modName,
     fullName: options.modName,
