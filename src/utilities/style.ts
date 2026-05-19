@@ -1,3 +1,5 @@
+import { modLogger } from '../deeplib';
+
 export const Style = {
   /**
    * Injects a CSS style block directly into the document head using a <style> tag.
@@ -52,6 +54,9 @@ export const Style = {
 
   /** Fetches the text content of a stylesheet or any resource at the given link. */
   async fetch(link: string) {
-    return fetch(link).then((res) => res.text());
+    return fetch(link).then((res) => res.text()).catch((err) => {
+      modLogger.error('Failed to fetch stylesheet:', err);
+      return '';
+    });
   }
 };

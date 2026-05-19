@@ -1,3 +1,5 @@
+import { modLogger } from '../deeplib';
+
 /**
  * A dictionary type representing translations,
  * where keys are source tags and values are translated strings.
@@ -107,7 +109,10 @@ export class Localization {
    * or an empty dictionary if the file cannot be fetched.
    */
   private static async fetchLanguageFile(fileUrl: string): Promise<TranslationDict | false> {
-    const response = await fetch(fileUrl);
+    const response = await fetch(fileUrl).catch((err) => {
+      modLogger.error('Failed to fetch translation file:', err);
+      return new Response(null, { status: 500 });
+    });
 
     if (!response.ok) {
       return false;
@@ -129,7 +134,11 @@ export class Localization {
     const manifestFile = 'manifest.txt';
     let fileList: string[] | null = null;
 
-    const response = await fetch(`${folderUrl}${manifestFile}`);
+    const response = await fetch(`${folderUrl}${manifestFile}`).catch((err) => {
+      modLogger.error('Failed to fetch language folder manifest:', err);
+      return new Response(null, { status: 500 });
+    });
+
     if (response.ok) {
       const content = (await response.text()).trim();
 
