@@ -8,7 +8,6 @@
     "target": "ESNext",
     "module": "ESNext",
     "moduleResolution": "bundler",
-		"esModuleInterop": false,
     
     "allowJs": false,
     "removeComments": false,
@@ -16,6 +15,7 @@
     "skipLibCheck": true,
 
     "outDir": "dist",
+    "rootDir": "src",
     "declaration": true,
     "paths": {
       "Types/*": ["./.types/*"],
