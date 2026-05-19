@@ -59,3 +59,10 @@ declare const IS_DEBUG: boolean;
  * This value is set at build time and configured via `version` field in the `package.json` file of this package.
  */
 declare const DEEPLIB_VERSION: string;
+
+/**
+ * The current mod info.
+ * 
+ * This value is set at build time and configured via `modInfo` field in the `deeplib.config.js` file.
+ */
+declare const MOD_INFO: Omit<import('bondage-club-mod-sdk').ModSDKModInfo, 'version'>;

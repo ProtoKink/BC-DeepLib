@@ -5,18 +5,6 @@ import { DebugModule } from '../modules/debug';
 /** Configuration object for initializing a mod via `initMod`. */
 interface InitOptions {
   /**
-   * Name of the mod.
-   * Used to identify the mod in the Mod SDK and storage.
-   */
-  modName: string,
-
-  /**
-   * Repository URL for the mod.
-   * Used to register the mod with the Mod SDK and display in the main menu.
-   */
-  modRepository?: string,
-
-  /**
    * List of modules (`BaseModule` subclasses) to register with the mod system.
    * Modules are initialized, loaded, and run in order.
    */
@@ -62,8 +50,6 @@ export let sdk: ModSdkManager;
  */
 export let modLogger: Logger;
 
-export let MOD_NAME: string;
-
 /**
  * Entry point for initializing a mod. Handles:
  *  - Setting up the Mod SDK
@@ -73,15 +59,14 @@ export let MOD_NAME: string;
  */
 export async function initMod(options: InitOptions) {
   sdk = new ModSdkManager({
-    name: options.modName,
-    fullName: options.modName,
+    name: MOD_INFO.name,
+    fullName: MOD_INFO.fullName,
     version: MOD_VERSION,
-    repository: options.modRepository
+    repository: MOD_INFO.repository
   });
-  MOD_NAME = options.modName;
 
-  modStorage = new ModStorage(options.modName);
-  modLogger = new Logger(MOD_NAME);
+  modStorage = new ModStorage(MOD_INFO.name);
+  modLogger = new Logger(MOD_INFO.name);
   Style.injectInline(`deeplib-style-${DEEPLIB_VERSION}`, deeplib_style);
 
   modLogger.debug('Init wait');
@@ -108,7 +93,7 @@ export async function initMod(options: InitOptions) {
  * @param {InitOptions} options Configuration for mod initialization.
  */
 async function init(options: InitOptions) {
-  if ((window as any)[options.modName + 'Loaded']) return;
+  if ((window as any)[MOD_INFO.name + 'Loaded']) return;
 
   const storageRes = tryCatch(() => {
     modStorage.load();
@@ -147,11 +132,11 @@ async function init(options: InitOptions) {
   if (options.mainMenuOptions && getModule('GUI')) {
     MainMenu.setOptions({
       ...options.mainMenuOptions,
-      repoLink: options.modRepository,
+      repoLink: MOD_INFO.repository,
     });
   }
 
-  (window as any)[options.modName + 'Loaded'] = true;
+  (window as any)[MOD_INFO.name + 'Loaded'] = true;
   modLogger.log(`Loaded! Version: ${MOD_VERSION_CAPTION}`);
 }
 
@@ -204,7 +189,7 @@ export function unloadMod(): true {
   unloadModules();
   sdk.unload();
 
-  delete (window as any)[MOD_NAME + 'Loaded'];
+  delete (window as any)[MOD_INFO.name + 'Loaded'];
   modLogger.debug('Unloaded.');
   return true;
 }

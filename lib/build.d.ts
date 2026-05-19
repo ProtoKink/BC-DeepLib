@@ -3,6 +3,8 @@ export declare interface BuildConfig {
   entry: string,
   /** Output file located in `{distDirName}/` */
   outfile: string,
+  /** Mod info to register with the Mod SDK */
+  modInfo: Omit<import('bondage-club-mod-sdk').ModSDKModInfo, 'version'>,
   /** Directory name of the dist folder, where the mod will be built */
   distDirName?: string,
   /** Directory name of the public folder, where the mod assets will be copied */
@@ -16,9 +18,9 @@ export declare interface BuildConfig {
   /** Host of the local dev server */
   host?: string,
   /** Port of the local dev server */
-  port?: number
+  port?: number,
   /** Additional esbuild options (target, plugins, define, globalName, etc.) */
-  esbuildOptions?: import('esbuild').BuildOptions
+  esbuildOptions?: import('esbuild').BuildOptions,
 } 
 
 export declare function defineConfig(config: BuildConfig, esbuildOptions?: import('esbuild').BuildOptions): BuildConfig;
