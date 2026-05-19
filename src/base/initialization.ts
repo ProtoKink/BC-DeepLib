@@ -1,6 +1,7 @@
 import deeplib_style from '../styles/index.scss';
-import { ModSdkManager, Localization, modules, registerModule, Style, ModStorage, MainMenuOptions, MainMenu, TranslationOptions, Logger, VersionModule, ModuleKey, tryCatch, ModulesList, getModule, tryCatchAsync } from '../deeplib';
+import { ModSdkManager, Localization, modules, registerModule, Style, ModStorage, MainMenuOptions, MainMenu, TranslationOptions, VersionModule, ModuleKey, tryCatch, ModulesList, getModule, tryCatchAsync } from '../deeplib';
 import { DebugModule } from '../modules/debug';
+import Logger, { ILogger } from 'js-logger';
 
 /** Configuration object for initializing a mod via `initMod`. */
 interface InitOptions {
@@ -48,7 +49,7 @@ export let sdk: ModSdkManager;
  * Mod specific logger instance.
  * Initialized by `initMod()`.
  */
-export let modLogger: Logger;
+export let modLogger: ILogger;
 
 /**
  * Entry point for initializing a mod. Handles:
@@ -66,7 +67,7 @@ export async function initMod(options: InitOptions) {
   });
 
   modStorage = new ModStorage(MOD_INFO.name);
-  modLogger = new Logger(MOD_INFO.name);
+  modLogger = Logger.get(MOD_INFO.name);
   Style.injectInline(`deeplib-style-${DEEPLIB_VERSION}`, deeplib_style);
 
   modLogger.debug('Init wait');

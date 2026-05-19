@@ -1,79 +1,31 @@
-type LogLevel = 'info' | 'log' | 'warn' | 'error' | 'debug';
+import Logger, { ILogLevel } from 'js-logger';
 
-interface LogEntry {
-  readonly args: readonly any[];
-  readonly date: Date;
-  readonly logLevel: LogLevel;
+function colorizeLog(logLevel: ILogLevel): string {
+  const name = logLevel.name;
+  const colors: Record<typeof name, string> = {
+    INFO: 'color: #32CCCC',
+    TRACE: 'color: #CCCC32',
+    WARN: 'color: #eec355',
+    ERROR: 'color: #750b0b',
+    DEBUG: 'color: #9E4BCF',
+    TIME: 'color: #CCCC32',
+  };
+
+  return colors[name];
 }
 
-export class Logger extends Array<LogEntry> {
-  private ModName: string = 'DeepLib';
+export const deepLibLogger = Logger.get('DeepLib');
 
-  constructor(modName?: string) {
-    super();
-
-    if (modName) {
-      this.ModName = modName;
-    }
-  }
-
-  private _Log(level: LogLevel, ...args: any[]): void {
-    const logEntry: LogEntry = {
-      logLevel: level,
-      args: [...args],
-      // trace: arguments.callee.caller.toString().split('\n'), 
-      date: new Date(Date.now())
-      // `[${this.ModName}] ${formattedArgs}` 
-    };
-
+Logger.useDefaults({
+  defaultLevel: Logger.DEBUG,
+  formatter: function(messages, context) {
+    const name = context.name || 'DeepLib';
     const userAgent = navigator.userAgent.toLowerCase();
     if (userAgent.includes('chrome') || userAgent.includes('firefox')) {
-      const color = Logger.colorizeLog(level);
-      args.forEach(arg => {
-        if (typeof arg === 'string') {
-          arg = `\n%c${arg}`;
-          // args.splice(args.indexOf(arg), 1, arg, color);
-        }
-      });
-      console.log(`%c${this.ModName}:`, color, ...args);
+      const color = colorizeLog(context.level);
+      messages.unshift(`%c${name}:`, color);
     } else {
-      console.log(`${this.ModName}:`, ...args);
+      messages.unshift(`${name}:`);
     }
-
-    this.push(logEntry);
   }
-
-  info(...args: any[]): void {
-    this._Log('info', ...args);
-  }
-
-  log(...args: any[]): void {
-    this._Log('log', ...args);
-  }
-
-  warn(...args: any[]): void {
-    this._Log('warn', ...args);
-  }
-
-  error(...args: any[]): void {
-    this._Log('error', ...args);
-  }
-
-  debug(...args: any[]): void {
-    this._Log('debug', ...args);
-  }
-
-  static colorizeLog(logLevel: LogLevel): string {
-    const colors: Record<LogLevel, string> = {
-      info: 'color: #32CCCC',
-      log: 'color: #CCCC32',
-      warn: 'color: #eec355',
-      error: 'color: #750b0b',
-      debug: 'color: #9E4BCF',
-    };
-
-    return colors[logLevel];
-  }
-}
-
-export const deepLibLogger = new Logger();
+});
