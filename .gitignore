@@ -3,3 +3,4 @@
 .vscode
 *lock.json
 *lock.yaml
+tsconfig.tsbuildinfo

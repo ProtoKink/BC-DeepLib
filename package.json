@@ -21,7 +21,7 @@
     }
   },
   "scripts": {
-    "all": "pnpm type:check && pnpm build && pnpm type:gen && pnpm type:copy && pnpm asset:copy",
+    "all": "pnpm lint && pnpm type:check && pnpm build && pnpm type:gen && pnpm type:copy && pnpm asset:copy",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
     "build": "node scripts/build.js",
