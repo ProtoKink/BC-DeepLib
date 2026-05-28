@@ -42,5 +42,6 @@
 
   .button-tooltip {
     border-radius: min(1.0dvh, 0.5dvw);
+    pointer-events: none;
   }
 }
