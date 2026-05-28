@@ -40,7 +40,7 @@ export type SubscreenOptions = {
    * If not configured, the default is the main menu for all screens, but main menu itself.
    * For main menu, the default is the Extensions menu 
    */
-  returnScreen?: (() => ScreenSpecifier | BaseSubscreen) | ScreenSpecifier | BaseSubscreen;
+  returnScreen?: Thunk<ScreenSpecifier | BaseSubscreen>;
 
   /** 
    * The background image for this subscreen. 
@@ -384,7 +384,7 @@ export abstract class BaseSubscreen {
     CharacterAppearanceForceUpCharacter = -1;
     CharacterLoadCanvas(Player);
 
-    const returnScreen = typeof this.options.returnScreen === 'function' ? this.options.returnScreen() : this.options.returnScreen;
+    const returnScreen = CommonUnwrapThunk(this.options.returnScreen);
 
     if (returnScreen instanceof BaseSubscreen || !returnScreen) {
       setSubscreen(returnScreen ?? 'mainmenu').then(() => {
