@@ -182,8 +182,9 @@ export class GuiImportExport extends BaseSubscreen {
         await writable.close();
 
         return true;
-      } catch (error: any) {
-        throw new Error('File save cancelled or failed: ' + error.message);
+      } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : String(error);
+        throw new Error(`File save cancelled or failed: ${message}`, { cause: error });
       }
     } else {
       const fileName = await Modal.prompt('Enter file name', { defaultValue: defaultFileName });
@@ -242,8 +243,9 @@ export class GuiImportExport extends BaseSubscreen {
         });
         const file = await fileHandle.getFile();
         return await importFromFileInternal(file);
-      } catch (error: any) {
-        throw new Error('File selection cancelled or failed: ' + error.message);
+      } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : String(error);
+        throw new Error(`File selection cancelled or failed: ${message}`, { cause: error });
       }
     } else {
       return new Promise((resolve, reject) => {
@@ -270,15 +272,17 @@ export class GuiImportExport extends BaseSubscreen {
 
   /** Copies the given data to the clipboard. */
   async exportToClipboard(data: string): Promise<void> {
-    return navigator.clipboard.writeText(data).catch((error) => {
-      throw new Error('Failed to copy data to clipboard.' + error);
+    return navigator.clipboard.writeText(data).catch((error: unknown) => {
+      const message = error instanceof Error ? error.message : String(error);
+      throw new Error(`Failed to copy data to clipboard: ${message}`, { cause: error });
     });
   }
 
   /** Prompts the user to enter data and returns it. */
   async importFromClipboard(): Promise<string | null> {
-    return Modal.prompt('Enter data to import').catch((error) => {
-      throw new Error('Failed to read data from clipboard.' + error);
+    return Modal.prompt('Enter data to import').catch((error: unknown) => {
+      const message = error instanceof Error ? error.message : String(error);
+      throw new Error(`Failed to read data from clipboard: ${message}`, { cause: error });
     });
   }
 
