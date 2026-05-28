@@ -248,39 +248,36 @@ function elementCreateDropdown(options: Omit<Dropdown, 'type'>): HTMLLabelElemen
 
   (options as Dropdown).type = 'dropdown';
 
-  const retElem = ElementCreate(deepMerge({
-    tag: 'label',
-    classList: ['deeplib-dropdown-container', options?.options?.direction ?? undefined],
-    attributes: {
-      id: `${options.id}-container`,
-      for: options.id,
-    },
-    children: [
-      options.label ? deepMerge({
-        tag: 'span',
+  const retElem = ElementDropdown.CreateLabelled(
+    options.id,
+    options.optionsList,
+    options.label ?? '',
+    options.onChange ?? function () { return options.setSettingValue?.(this.value); },
+    options.options,
+    deepMerge({
+      container: {
+        classList: ['deeplib-dropdown-container', options?.options?.direction ?? undefined],
+        attributes: {
+          id: `${options.id}-container`,
+          for: options.id,
+        },
+        eventListeners: {
+          mouseover: function (ev) {
+            tooltipMouseOver.call(this, ev, options.description || null);
+          },
+          mouseout: function (ev) {
+            tooltipMouseOut.call(this, ev);
+          }
+        }
+      },
+      label: {
         classList: ['deeplib-text'],
         attributes: {
           id: `${options.id}-label`,
         },
-        children: [options.label]
-      } as HTMLOptions<'span'>, options.htmlOptions?.label) : undefined,
-      ElementCreateDropdown(
-        options.id,
-        options.optionsList,
-        function () { return options.setSettingValue?.(this.value); },
-        options.options,
-        options.htmlOptions?.select
-      ),
-    ],
-    eventListeners: {
-      mouseover: function (ev) {
-        tooltipMouseOver.call(this, ev, options.description || null);
       },
-      mouseout: function (ev) {
-        tooltipMouseOut.call(this, ev);
-      }
-    }
-  } as HTMLOptions<'label'>, options.htmlOptions?.container));
+    } as Partial<Record<'select' | 'label' | 'container', Omit<HTMLOptions<any>, 'tag'>>>, options.htmlOptions),
+  );
 
   BaseSubscreen.currentElements.push([retElem, options as Dropdown]);
 
@@ -308,18 +305,18 @@ function elementGetTooltip() {
 
 function tooltipMouseOver(this: HTMLElement, _ev: MouseEvent, description: ElementButton.StaticNode) {
   const elementRect = this.getBoundingClientRect();
-  
+
   elementSetTooltip(description, 'bottom');
-  
+
   const tooltipElement = elementGetTooltip();
   if (tooltipElement) {
     // Force a reflow to ensure tooltip is rendered and positioned
     void tooltipElement.offsetHeight;
-    
+
     const tooltipRect = tooltipElement.getBoundingClientRect();
-    
+
     const overlaps = domUtil.doRectsOverlap(elementRect, tooltipRect);
-    
+
     // If tooltip covers the element, move it to top
     const position = overlaps ? 'top' : 'bottom';
     if (position === 'top') {

@@ -42,21 +42,18 @@ export type Input = Prettify<{
 } & BaseElementModel>;
 
 export type Dropdown = Prettify<{
-  id: Parameters<typeof ElementCreateDropdown>[0];
+  id: Parameters<typeof ElementDropdown.CreateLabelled>[0];
   type: 'dropdown';
   label?: string;
+  optionsList: Parameters<typeof ElementDropdown.CreateLabelled>[1];
+  onChange?: Parameters<typeof ElementDropdown.CreateLabelled>[3];
   description?: ElementButton.StaticNode;
-  optionsList: Parameters<typeof ElementCreateDropdown>[1];
   setElementValue?: () => string;
   setSettingValue?: (val: string) => void;
-  options?: Parameters<typeof ElementCreateDropdown>[3] & {
+  options?: Parameters<typeof ElementDropdown.CreateLabelled>[4] & {
     direction?: ElementFlexDirection;
   };
-  htmlOptions?: {
-    container?: Partial<Omit<HTMLOptions<any>, 'tag'>>
-    select?: Parameters<typeof ElementCreateDropdown>[4];
-    label?: Partial<Omit<HTMLOptions<'label'>, 'tag'>>;
-  };
+  htmlOptions?: Partial<Record<'label' | 'container' | 'select', Omit<HTMLOptions<any>, 'tag'>>> | null | undefined;
 } & Omit<BaseElementModel, 'id' | 'disabled'>>;
 
 export type Label = Prettify<{
