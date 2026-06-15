@@ -11,12 +11,13 @@
     "CREDITS.md",
     "README.md"
   ],
-  "types": "./dist/deeplib.d.ts",
   "exports": {
     "./deeplib": {
+      "types": "./dist/deeplib.d.ts",
       "import": "./dist/deeplib.js"
     },
     "./build": {
+      "types": "./lib/build.d.ts",
       "import": "./lib/deeplib.js"
     }
   },

@@ -65,4 +65,4 @@ declare const DEEPLIB_VERSION: string;
  * 
  * This value is set at build time and configured via `modInfo` field in the `deeplib.config.js` file.
  */
-declare const MOD_INFO: Omit<import('bondage-club-mod-sdk').ModSDKModInfo, 'version'>;
+declare const MOD_INFO: Omit<ModSDKModInfo, 'version'>;
