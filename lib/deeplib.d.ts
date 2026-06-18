@@ -24,6 +24,12 @@ export declare interface BuildConfig {
    * @default 'public'
    */
   publicDirName?: string,
+  /**
+   * When true, embeds all public assets (images, translations, etc.) into the JS
+   * bundle instead of copying them to the dist public folder.
+   * @default false
+   */
+  doBundlePublicAssets?: boolean,
   /** 
    * `node` scripts to run
    * @default []

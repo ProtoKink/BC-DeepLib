@@ -6,6 +6,17 @@
 declare const PUBLIC_URL: string;
 
 /**
+ * Whether public assets were embedded into the JS bundle at build time.
+ */
+declare const ARE_PUBLIC_ASSETS_BUNDLED: boolean;
+
+/**
+ * Map of public asset paths to their bundled contents.
+ * Text assets contain raw file contents; binary assets contain data URLs.
+ */
+declare const BUNDLED_PUBLIC_ASSET_MAP: Record<string, string>;
+
+/**
  * The current mod version.
  * 
  * This value is set at build time and configured via `version` field in the `package.json` file.

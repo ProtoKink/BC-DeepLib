@@ -1,5 +1,6 @@
 import deeplib_style from '../styles/index.scss';
 import { ModSdkManager, Localization, modules, registerModule, Style, ModStorage, MainMenuOptions, MainMenu, TranslationOptions, VersionModule, ModuleKey, tryCatch, ModulesList, getModule, tryCatchAsync } from '../deeplib';
+import { installBundledPublicAssetFetch } from '../utilities/bundled_assets';
 import { DebugModule } from '../modules/debug';
 import Logger, { ILogger } from 'js-logger';
 
@@ -65,6 +66,8 @@ export async function initMod(options: InitOptions) {
     version: MOD_VERSION,
     repository: MOD_INFO.repository
   });
+	
+  installBundledPublicAssetFetch();
 
   modStorage = new ModStorage(MOD_INFO.name);
   modLogger = Logger.get(MOD_INFO.name);

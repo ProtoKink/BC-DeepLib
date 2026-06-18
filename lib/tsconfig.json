@@ -1,0 +1,16 @@
+{
+	"compilerOptions": {
+		"checkJs": true,
+		"noEmit": true,
+		"module": "NodeNext",
+		"moduleResolution": "nodenext"
+	},
+	"include": [
+		"**/*.ts",
+		"**/*.js"
+	],
+	"exclude": [
+		"node_modules",
+		"dist"
+	]
+}

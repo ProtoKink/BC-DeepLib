@@ -17,7 +17,7 @@
       "import": "./dist/deeplib.js"
     },
     "./build": {
-      "types": "./lib/build.d.ts",
+      "types": "./lib/deeplib.d.ts",
       "import": "./lib/deeplib.js"
     }
   },
