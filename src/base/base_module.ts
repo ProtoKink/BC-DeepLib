@@ -52,7 +52,7 @@ export abstract class BaseModule {
       this.registerDefaultSettings(modStorage.playerStorage);
     }
 
-    return modStorage.playerStorage[this.settingsStorage];
+    return modStorage.playerStorage[this.settingsStorage] as BaseSettingsModel | null;
   }
 
   /**

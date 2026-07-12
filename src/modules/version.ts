@@ -7,7 +7,9 @@ export type VersionModuleOptions = {
    */
   migrators?: BaseMigrator[];
   /** Message to display when a new version is detected */
-  newVersionMessage?: string;
+  newVersionMessage?: Thunk<string> | Thunk<Promise<string>>;
+  /** Whether to show the new version message */
+  showNewVersionMessage?: Thunk<boolean>;
   /** Optional lifecycle hook. Runs before each migration */
   beforeEach?: () => void;
   /** Optional lifecycle hook. Runs after each migration */
@@ -36,8 +38,8 @@ export class VersionModule extends BaseModule {
   /** The current mod version (retrieved from `ModSdkManager.ModInfo.version`) */
   private static version: string;
 
-  private static newVersionMessage?: string = '';
-
+  private static newVersionMessage?: Thunk<string> | Thunk<Promise<string>>;
+  private static showNewVersionMessage?: Thunk<boolean>;
   /** List of registered migration handlers, sorted by version */
   private static migrators: BaseMigrator[] = [];
 
@@ -52,6 +54,7 @@ export class VersionModule extends BaseModule {
     options ??= {};
 
     VersionModule.newVersionMessage = options.newVersionMessage;
+    VersionModule.showNewVersionMessage = options.showNewVersionMessage;
 
     if (options.migrators) {
       VersionModule.migrators = options.migrators;
@@ -74,7 +77,7 @@ export class VersionModule extends BaseModule {
 
     VersionModule.checkVersionUpdate();
 
-    if (modStorage.playerStorage.GlobalModule.doShowNewVersionMessage && VersionModule.isItNewVersion) {
+    if (CommonUnwrapThunk(VersionModule.showNewVersionMessage) && VersionModule.isItNewVersion) {
       VersionModule.sendNewVersionMessage();
     }
   }
@@ -129,8 +132,13 @@ export class VersionModule extends BaseModule {
   }
 
   /** Sends the currently configured "new version" message to the local player. */
-  static sendNewVersionMessage() {
+  static async sendNewVersionMessage() {
     if (!VersionModule.newVersionMessage) return;
+
+    const unwrapped = CommonUnwrapThunk(VersionModule.newVersionMessage);
+    const message = unwrapped instanceof Promise ? 
+      await unwrapped : 
+      unwrapped;
     
     const beepLogLength = FriendListBeepLog.push({
       MemberNumber: Player.MemberNumber,
@@ -140,7 +148,7 @@ export class VersionModule extends BaseModule {
       Private: false,
       Sent: false,
       Time: new Date(),
-      Message: VersionModule.newVersionMessage
+      Message: message
     });
 
     const beepIdx = beepLogLength - 1;
@@ -150,7 +158,7 @@ export class VersionModule extends BaseModule {
     });
     const data = FriendListBeepLog[beepIdx];
 
-    ServerShowBeep(VersionModule.newVersionMessage, 10000, {
+    ServerShowBeep(message, 10000, {
       memberNumber: data.MemberNumber,
       memberName: data.MemberName,
       chatRoomName: data.ChatRoomName,

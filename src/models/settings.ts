@@ -1,7 +1,4 @@
-import { BaseSettingsModel } from '../deeplib';
-
 export type SettingsModel = {
-  [x: string]: any;
-  GlobalModule: BaseSettingsModel;
+  [x: string]: unknown;
   Version: string;
 };
