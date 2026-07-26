@@ -39,6 +39,7 @@
     "@eslint/js": "^10.0.1",
     "@stylistic/eslint-plugin": "^5.10.0",
     "@types/node": "^22.19.19",
+    "@types/serve-static": "^2.2.0",
     "bc-stubs": "128.0.0",
     "bondage-club-mod-sdk": "^1.2.0",
     "eslint": "^10.4.0",

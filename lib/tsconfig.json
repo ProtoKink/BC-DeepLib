@@ -3,11 +3,15 @@
 		"checkJs": true,
 		"noEmit": true,
 		"module": "NodeNext",
-		"moduleResolution": "nodenext"
+		"moduleResolution": "nodenext",
+		"types": [
+			"node",
+		]
 	},
 	"include": [
 		"**/*.ts",
-		"**/*.js"
+		"**/*.js",
+		"**/*.d.ts"
 	],
 	"exclude": [
 		"node_modules",
