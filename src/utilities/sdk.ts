@@ -10,7 +10,7 @@ export const HookPriority = {
   Top: 100
 };
 
-/** Type alias representing module of hook? */
+/** Tag used to group/remove related hooks */
 export type ModuleCategory = number | string;
 
 /**
