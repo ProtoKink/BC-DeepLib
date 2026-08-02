@@ -104,8 +104,8 @@ export class EventChannel<TEvents extends Record<string, unknown>, TChannelName 
       message.Sender &&
       message.Sender !== Player.MemberNumber &&
       message.Dictionary &&
-      !!message.Dictionary[0]?.data &&
-      !!message.Dictionary[0]?.type
+      message.Dictionary[0]?.data !== undefined &&
+      message.Dictionary[0]?.type !== undefined
     ) || false;
   }
 }
