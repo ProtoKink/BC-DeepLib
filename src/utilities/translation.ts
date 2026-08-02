@@ -71,6 +71,16 @@ export class Localization {
     }
   }
 
+  static unload() {
+    Localization.initialized = false;
+    Localization.LibTranslation = {};
+    Localization.ModTranslation = {};
+    Localization.PathToModTranslation = undefined;
+    Localization.PathToLibTranslation = `${PUBLIC_URL}/dl_translations/`;
+    Localization.DefaultLanguage = 'en';
+    Localization.FetchFolder = false;
+  }
+
   /** Get a translated string from mod translations by source tag. */
   static getTextMod(srcTag: string): string | undefined {
     return Localization.ModTranslation?.[srcTag] || undefined;

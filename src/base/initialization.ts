@@ -192,6 +192,7 @@ function initModules(modulesToRegister: [ModuleKey, ModulesList[ModuleKey]][]): 
 export function unloadMod(): true {
   unloadModules();
   sdk.unload();
+  Localization.unload();
 
   delete (window as any)[MOD_INFO.name + 'Loaded'];
   modLogger.debug('Unloaded.');
