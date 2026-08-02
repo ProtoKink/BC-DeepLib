@@ -40,19 +40,6 @@ export class ModSdkManager {
     this.SDK = bcModSdk.registerMod(info, options);
   }
 
-  /** Retrieves or initializes patch data for a given target function. */
-  initPatchableFunction(target: string): IPatchedFunctionData {
-    let result = this.patchedFunctions.get(target);
-    if (!result) {
-      result = {
-        name: target,
-        hooks: []
-      };
-      this.patchedFunctions.set(target, result);
-    }
-    return result;
-  }
-
   /**
    * Hooks a function with a callback at a given priority. 
    * 
@@ -136,5 +123,18 @@ export class ModSdkManager {
    */
   unload() {
     this.SDK.unload();
+  }
+
+  /** Retrieves or initializes patch data for a given target function. */
+  private initPatchableFunction(target: string): IPatchedFunctionData {
+    let result = this.patchedFunctions.get(target);
+    if (!result) {
+      result = {
+        name: target,
+        hooks: []
+      };
+      this.patchedFunctions.set(target, result);
+    }
+    return result;
   }
 }
