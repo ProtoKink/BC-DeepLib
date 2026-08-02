@@ -1,5 +1,4 @@
 import { sdk } from '../deeplib';
-import { ModSdkManager } from './sdk';
 
 type DeepLibMessageDictionaryEntry<Type extends string, Data> = {
   type: Type;
@@ -35,9 +34,10 @@ export interface EventChannelMessage<
 
 export class EventChannel<TEvents extends Record<string, unknown>, TChannelName extends string> {
   private listeners: { [K in keyof TEvents]?: Listener<TEvents[K]>[]; } = {};
+  private removeHook: () => void;
 
   constructor(private channelName: TChannelName) {
-    sdk.hookFunction('ChatRoomMessageProcessHidden', 0, (args, next) => {
+    this.removeHook = sdk.hookFunction('ChatRoomMessageProcessHidden', 0, (args, next) => {
       if (!this.isChannelMessage(args[0] as UnverifiedMessage)) {
         return next(args);
       }
@@ -58,7 +58,7 @@ export class EventChannel<TEvents extends Record<string, unknown>, TChannelName 
   public unload() {
     (Object.keys(this.listeners) as (keyof TEvents)[])
       .forEach(key => delete this.listeners[key]);
-    ModSdkManager.prototype.removeHookByModule('ChatRoomMessageProcessHidden', `EventChannel-${this.channelName}`);
+    this.removeHook();
   }
 
   public sendEvent<K extends keyof TEvents & string>(type: K, data: TEvents[K], target: number | null = null) {
