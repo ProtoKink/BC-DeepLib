@@ -84,7 +84,8 @@ export abstract class BaseModule {
    * If some settings already exist, they will be merged with defaults.
    * Existing values will NOT be overwritten.
    */
-  registerDefaultSettings(target: SettingsModel): void {
+  registerDefaultSettings(target: SettingsModel | undefined): void {
+    target ??= modStorage.playerStorage ?? {};
     const storage = this.settingsStorage;
     const defaults = this.defaultSettings;
     if (!storage || !defaults) return;
