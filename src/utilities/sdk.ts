@@ -137,6 +137,7 @@ export class ModSdkManager {
    */
   unload() {
     this.SDK.unload();
+    this.patchedFunctions.clear();
   }
 
   /** Retrieves or initializes patch data for a given target function. */
