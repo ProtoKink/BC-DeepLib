@@ -94,6 +94,7 @@ export class DebugModule extends BaseModule {
 
       options ??= {};
       options.label = asset.Name;
+      args[4] = options;
 
       return next(args);
     });
