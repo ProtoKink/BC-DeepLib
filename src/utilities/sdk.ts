@@ -53,8 +53,10 @@ export class ModSdkManager {
   ): () => void {
     const data = this.initPatchableFunction(target);
 
-    if (data.hooks.some((h) => h.hook === hook)) {
-      return () => null;
+    const existingHook = data.hooks.find((h) => h.hook === hook);
+    if (existingHook) {
+      console.warn(`Hook already exists for function ${target}:`, hook.toString());
+      return existingHook.removeCallback;
     }
 
     const removeCallback = this.SDK.hookFunction(target, priority, hook);
