@@ -67,7 +67,6 @@ export class ModSdkManager {
       module,
       removeCallback
     });
-    data.hooks.sort((a, b) => b.priority - a.priority);
 
     return removeCallback;
   }
