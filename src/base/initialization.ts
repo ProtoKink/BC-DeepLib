@@ -79,7 +79,7 @@ export async function initMod(options: InitOptions) {
   }
 
   await ServerIsLoggedInAsync();
-  init(options);
+  await init(options);
 }
 
 
