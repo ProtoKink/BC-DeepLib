@@ -91,32 +91,45 @@ export class ModSdkManager {
    * Removes all hooks associated with a specific module from a target function.
    */
   removeHookByModule(target: string, module: ModuleCategory): boolean {
-    const data = this.initPatchableFunction(target);
+    const data = this.patchedFunctions.get(target);
+    if (!data) return false;
 
+    let removed = false;
     for (let i = data.hooks.length - 1; i >= 0; i--) {
       if (data.hooks[i].module === module) {
         data.hooks[i].removeCallback();
         data.hooks.splice(i, 1);
+        removed = true;
       }
     }
 
-    return true;
+    if (data.hooks.length === 0) {
+      this.patchedFunctions.delete(target);
+    }
+
+    return removed;
   }
 
   /**
    * Removes all hooks associated with a specific module across all patched functions.
    */
   removeAllHooksByModule(module: ModuleCategory): boolean {
+    let removed = false;
     for (const data of this.patchedFunctions.values()) {
       for (let i = data.hooks.length - 1; i >= 0; i--) {
         if (data.hooks[i].module === module) {
           data.hooks[i].removeCallback();
           data.hooks.splice(i, 1);
+          removed = true;
         }
+      }
+
+      if (data.hooks.length === 0) {
+        this.patchedFunctions.delete(data.name);
       }
     }
 
-    return true;
+    return removed;
   }
 
   /**
