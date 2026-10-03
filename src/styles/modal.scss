@@ -6,18 +6,22 @@
   z-index: 1001;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  justify-content: safe center;
+  align-items: safe center;
   gap: 0.5em;
   min-width: max(50dvw, 25dvh);
   font-size: 1em;
   padding: min(2dvh, 1dvw);
+  box-sizing: border-box;
+  margin: 0;
+  inset-inline-end: auto;
   background-color: var(--deeplib-element-color);
   border-radius: min(1.2dvh, 0.6dvw);
   border: min(0.2dvh, 0.1dvw) solid var(--deeplib-border-color);
   color: var(--deeplib-text-color);
   max-width: 90dvw;
-	max-height: 90dvh;
+  max-height: 90dvh;
+  overflow: hidden;
 
   .deeplib-modal-input {
     width: 100%;
@@ -28,6 +32,12 @@
 
   input.deeplib-modal-input {
     max-width: max(50dvh, 25dvw);
+  }
+
+  .deeplib-modal-prompt,
+  .deeplib-modal-button-container {
+    flex-shrink: 0;
+    max-width: 100%;
   }
 
   .deeplib-modal-button-container {
@@ -52,8 +62,12 @@
   .deeplib-modal-prompt-container {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    justify-content: flex-start;
+    align-items: safe center;
+    flex: 1 1 auto;
+    min-height: 0;
+    min-width: 0;
+    max-width: 100%;
   }
 }
 
