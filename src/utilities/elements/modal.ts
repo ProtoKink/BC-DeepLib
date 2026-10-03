@@ -119,7 +119,7 @@ export class Modal<T extends string = string> {
       children: [
         {
           tag: 'div',
-          classList: ['deeplib-modal-prompt-container'],
+          classList: ['deeplib-modal-prompt-container', 'scroll-box'],
           children: [
             ...prompt,
           ]
