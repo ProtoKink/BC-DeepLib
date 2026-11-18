@@ -241,7 +241,7 @@ function elementCreateDropdown(options: Omit<Dropdown, 'type'>): HTMLLabelElemen
       label: {
         classList: ['deeplib-text'],
         attributes: {
-          id: `${options.id}-label`,
+          id: `${options.id}-label`, hidden: !options.label,
         },
       },
     } as Partial<Record<'select' | 'label' | 'container', Omit<HTMLOptions<any>, 'tag'>>>, options.htmlOptions),
