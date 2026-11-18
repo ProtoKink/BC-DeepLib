@@ -142,7 +142,7 @@ export abstract class BaseSubscreen {
     };
 
     const screenName = this.options.name;
-    const screenId = `${MOD_INFO.name}_${screenName}`;
+    const screenId = `${MOD_INFO.name}_${screenName}` as ScreenName;
 
     exportToGlobal(`${screenId}Load`, this.load.bind(this));
     exportToGlobal(`${screenId}Run`, this.run.bind(this));
@@ -152,7 +152,7 @@ export abstract class BaseSubscreen {
     exportToGlobal(`${screenId}Resize`, this.resize.bind(this));
     exportToGlobal(`${screenId}Background`, this.options.background);
 
-    CommonCSVCache[ScreenFileGetTranslation('DeepLibMod', screenId) as string] = [];
+    CommonCSVCache[ScreenFileGetTranslation('DeepLibMod' as keyof ModuleScreens, screenId, '')] = [];
   }
 
   /** Changes the currently active subscreen. */

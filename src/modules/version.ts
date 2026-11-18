@@ -147,6 +147,7 @@ export class VersionModule extends BaseModule {
       ChatRoomSpace: 'X',
       Private: false,
       Sent: false,
+      Read: true,
       Time: new Date(),
       Message: message
     });

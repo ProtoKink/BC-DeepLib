@@ -39,7 +39,7 @@ export function sendLocalMessage(id: string | null, message: string, timeoutInSe
 
 export function sendActionMessage(msg: string, target: undefined | number = undefined, dictionary: ChatMessageDictionaryEntry[] = []) {
   if (!msg) return;
-  ServerSend('ChatRoomChat', {
+  ServerSend('ChatRoomChat' as const, {
     Content: 'DEEPLIB_CUSTOM_ACTION',
     Type: 'Action',
     Target: target ?? undefined,

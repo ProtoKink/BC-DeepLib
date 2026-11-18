@@ -62,8 +62,8 @@ export class EventChannel<TEvents extends Record<string, unknown>, TChannelName 
   }
 
   public sendEvent<K extends keyof TEvents & string>(type: K, data: TEvents[K], target: number | null = null) {
-    const packet = {
-      Type: 'Hidden',
+    const packet: ServerChatRoomMessage = {
+      Type: 'Hidden' as ServerChatRoomMessageType,
       Content: this.channelName,
       Sender: Player.MemberNumber,
       ...(target ? { Target: target } : {}),
@@ -73,9 +73,9 @@ export class EventChannel<TEvents extends Record<string, unknown>, TChannelName 
           data
         } as DeepLibMessageDictionaryEntry<K, TEvents[K]>
       ]
-    };
+    } as unknown as ServerChatRoomMessage;
 
-    ServerSend('ChatRoomChat', packet);
+    ServerSend('ChatRoomChat' as const, packet as unknown as ServerChatRoomMessage);
   }
 
   public registerListener<K extends keyof TEvents & string>(event: K, listener: Listener<TEvents[K]>): () => void {
