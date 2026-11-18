@@ -63,39 +63,26 @@ function elementCreateCheckbox(options: Omit<Checkbox, 'type'>): HTMLLabelElemen
 
   const disabled = CommonUnwrapThunk(options?.disabled ?? false);
 
-  const retElem = ElementCreate(deepMerge({
-    tag: 'label',
-    classList: ['deeplib-checkbox-container', options?.options?.direction ?? 'rowReverse'],
-    attributes: {
-      id: `${options.id}-container`,
-      for: options.id,
-    },
-    children: [
-      options.label ? deepMerge({
-        tag: 'span',
+  const retElem = ElementCheckbox.CreateLabelled(
+    options.id,
+    options.label,
+    function () { options?.setSettingValue?.(this.checked); },
+    deepMerge<ElementCheckbox.Options, ElementCheckbox.Options | null | undefined>({
+      disabled: disabled,
+      checked: options?.setElementValue?.() || false,
+    }, options.options ?? {}),
+    {
+      container: deepMerge({
+        classList: ['deeplib-checkbox-container', options?.options?.direction ?? 'row'],
+      }, options.htmlOptions?.container),
+      checkbox: deepMerge({
+        classList: ['deeplib-input'],
+      }, options.htmlOptions?.checkbox),
+      label: options.label ? deepMerge({
         classList: ['deeplib-text'],
-        attributes: {
-          id: `${options.id}-label`,
-        },
-        children: [options.label]
-      } as HTMLOptions<'span'>, options.htmlOptions?.label) : undefined,
-      deepMerge({
-        tag: 'input',
-        classList: ['checkbox', 'deeplib-input'],
-        attributes: {
-          type: 'checkbox',
-          id: options.id,
-          disabled: disabled,
-          checked: options?.setElementValue?.() || undefined,
-        },
-        eventListeners: {
-          change: function () {
-            options?.setSettingValue?.(this.checked);
-          }
-        }
-      } as HTMLOptions<'input'>, options.htmlOptions?.checkbox),
-    ],
-  } as HTMLOptions<'label'>, options.htmlOptions?.container));
+      }, options.htmlOptions?.label) : undefined
+    }
+  );
 
   if (options.description) {
     retElem.addEventListener('mouseover', function (ev) {

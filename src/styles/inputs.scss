@@ -4,10 +4,7 @@
   align-items: center;
   gap: 0.3em;
   width: fit-content;
-
-  span {
-    user-select: none;
-  }
+	height: unset;
 
   .deeplib-input {
     width: min(5vh, 2.5vw);

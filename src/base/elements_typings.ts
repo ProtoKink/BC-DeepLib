@@ -19,12 +19,12 @@ export type Button = Prettify<{
 
 export type Checkbox = Prettify<{
   type: 'checkbox';
-  label?: string;
+  label: string;
   description?: ElementButton.StaticNode;
   setElementValue?: () => boolean;
   setSettingValue?: (val: boolean) => void;
   htmlOptions?: Partial<Record<'container' | 'checkbox' | 'label', Omit<HTMLOptions<any>, 'tag'>>> | null | undefined;
-  options?: {
+  options?: ElementCheckbox.Options & {
     direction?: ElementFlexDirection;
   }
 } & BaseElementModel>;
