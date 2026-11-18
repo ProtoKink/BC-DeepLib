@@ -28,42 +28,23 @@ function elementCreateButton(options: Omit<Button, 'type'>): HTMLButtonElement {
   if (elem) return elem;
 
   (options as Button).type = 'button';
-  let image = undefined;
 
-  if (options.options?.image) {
-    image = options.options.image;
-    options.options.image = undefined;
-  }
-
-  const disabled = typeof options?.disabled === 'function' ? options?.disabled() : options?.disabled;
+  const disabled = CommonUnwrapThunk(options?.disabled ?? false);
+  const hasImage = options.options?.image !== undefined;
 
   const button = ElementButton.Create(
     options.id,
     options?.onClick ?? (() => { }),
-    deepMerge({
-      labelPosition: 'center',
-    }, options.options),
+    deepMerge<ElementButton.Options, ElementButton.Options | null | undefined>({
+      labelPosition: hasImage ? 'right' : 'center',
+      imageColor: !Themed?.isEnabled() ? 'black' : undefined,
+    }, options.options ?? {}),
     deepMerge({
       button: {
         classList: ['deeplib-button'],
         attributes: {
           disabled: disabled,
         },
-        children: [
-          image ? deepMerge({
-            tag: 'img',
-            attributes: {
-              id: `${options.id}-image`,
-              alt: '',
-              decoding: 'async',
-              loading: 'lazy',
-              src: 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7' // 1x1 transparent image to get rid of broken image
-            },
-            style: {
-              '--image': `url("${image}")`,
-            },
-          }, options.htmlOptions?.img) : undefined,
-        ],
       },
     }, options.htmlOptions ?? {}));
 
@@ -80,7 +61,7 @@ function elementCreateCheckbox(options: Omit<Checkbox, 'type'>): HTMLLabelElemen
 
   (options as Checkbox).type = 'checkbox';
 
-  const disabled = typeof options?.disabled === 'function' ? options?.disabled() : options?.disabled;
+  const disabled = CommonUnwrapThunk(options?.disabled ?? false);
 
   const retElem = ElementCreate(deepMerge({
     tag: 'label',
@@ -154,7 +135,7 @@ function elementCreateInput(options: Input): HTMLLabelElement {
 
   if (elem) return elem;
 
-  const disabled = typeof options?.disabled === 'function' ? options?.disabled() : options?.disabled;
+  const disabled = CommonUnwrapThunk(options?.disabled ?? false);
 
   const retElem = ElementCreate(deepMerge({
     tag: 'label',

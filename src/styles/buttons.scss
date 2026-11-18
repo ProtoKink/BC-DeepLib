@@ -1,5 +1,4 @@
 .deeplib-button {
-  color: var(--deeplib-text-color);
   width: 100%;
   height: 100%;
 
@@ -8,30 +7,10 @@
     border-radius: min(1.0dvh, 0.5dvw);
   }
 
-  img {
-    position: absolute;
-    top: 0%;
-    left: 0%;
-    width: 100%;
-    height: 100%;
-    background-position: left;
-    background-color: var(--deeplib-icon-color);
-    background-blend-mode: multiply;
-    background-size: contain;
-    mask-position: left;
-    mask-size: contain;
-    background-repeat: no-repeat;
-    mask-repeat: no-repeat;
-    color: transparent;
-
-    background-image: var(--image);
-    mask-image: var(--image);
-    pointer-events: none;
-  }
-
-  &:hover img {
-    background-color: var(--deeplib-icon-hover-color);
-  }
+	.button-image {
+		width: min(86px, calc(100% - 2 * var(--inner-border-width)));
+		height: min(86px, calc(100% - 2 * var(--inner-border-width)));
+	}
 
   .button-label {
     background-color: transparent !important;
