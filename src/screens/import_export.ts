@@ -1,5 +1,5 @@
 
-import { BaseModule, BaseSettingsModel, BaseSubscreen, ModuleKey, SubscreenOptions, deepMerge, getModule, getText, hasGetter, layout, modLogger, modules } from '../deeplib';
+import { BaseModule, BaseSettingsModel, BaseSubscreen, ModuleKey, SubscreenOptions, deepMerge, getModule, getText, hasGetter, modLogger, modules } from '../deeplib';
 import { advElement } from '../utilities/elements/elements';
 import { Modal } from '../utilities/elements/modal';
 
@@ -49,6 +49,7 @@ export class GuiImportExport extends BaseSubscreen {
 
     super.load();
 
+    const settings = ElementWrap(BaseSubscreen.ids.settings) as HTMLDivElement;
     const importFromFileButton = advElement.createButton({
       id: 'deeplib-import-file-button',
       size: [600, 90],
@@ -60,7 +61,7 @@ export class GuiImportExport extends BaseSubscreen {
         label: getText('import-export.button.import_file')
       }
     });
-    layout.appendToSettingsDiv(importFromFileButton);
+    settings.append(importFromFileButton);
 
     const exportToFileButton = advElement.createButton({
       id: 'deeplib-export-file-button',
@@ -73,7 +74,7 @@ export class GuiImportExport extends BaseSubscreen {
         label: getText('import-export.button.export_file')
       }
     });
-    layout.appendToSettingsDiv(exportToFileButton);
+    settings.append(exportToFileButton);
 
     const importFromClipboardButton = advElement.createButton({
       id: 'deeplib-import-clipboard-button',
@@ -86,7 +87,7 @@ export class GuiImportExport extends BaseSubscreen {
         label: getText('import-export.button.import_clipboard')
       }
     });
-    layout.appendToSettingsDiv(importFromClipboardButton);
+    settings.append(importFromClipboardButton);
 
     const exportToClipboardButton = advElement.createButton({
       id: 'deeplib-export-clipboard-button',
@@ -99,7 +100,7 @@ export class GuiImportExport extends BaseSubscreen {
         label: getText('import-export.button.export_clipboard')
       }
     });
-    layout.appendToSettingsDiv(exportToClipboardButton);
+    settings.append(exportToClipboardButton);
   }
 
   resize(): void {

@@ -1,5 +1,5 @@
 
-import { BaseSubscreen, byteToKB, getModule, getText, GUI, GuiDebug, layout, modStorage, setSubscreen, SubscreenOptions } from '../deeplib';
+import { BaseSubscreen, byteToKB, getModule, getText, GUI, GuiDebug, modStorage, setSubscreen, SubscreenOptions } from '../deeplib';
 import { advElement } from '../utilities/elements/elements';
 import { GuiImportExport } from './import_export';
 
@@ -75,7 +75,7 @@ export class MainMenu extends BaseSubscreen {
       }
     });
 
-    const menu = document.getElementById('deeplib-nav-menu');
+    const menu = ElementWrap(BaseSubscreen.ids.menu) as HTMLDivElement;
     if (menu) {
       menu.append(exitButton);
     }
@@ -96,11 +96,10 @@ export class MainMenu extends BaseSubscreen {
         }
       });
 
-      layout.appendToSettingsDiv(button);
+      ElementWrap(BaseSubscreen.ids.settings)?.append(button);
     }
 
-    const miscDiv = layout.getMiscDiv();
-    layout.appendToSubscreen(miscDiv);
+    const misc = ElementWrap(BaseSubscreen.ids.misc) as HTMLDivElement;
 
     if (MainMenu.options.wikiLink) {
       const wikiButton = advElement.createButton({
@@ -114,7 +113,7 @@ export class MainMenu extends BaseSubscreen {
           label: getText('mainmenu.button.wiki'),
         }
       });
-      layout.appendToMiscDiv(wikiButton);
+      misc.append(wikiButton);
     }
 
     if (MainMenu.options.repoLink) {
@@ -129,7 +128,7 @@ export class MainMenu extends BaseSubscreen {
           label: getText('mainmenu.button.repo'),
         }
       });
-      layout.appendToMiscDiv(repoButton);
+      misc.append(repoButton);
     }
 
     if (MainMenu.options.resetSubscreen) {
@@ -144,7 +143,7 @@ export class MainMenu extends BaseSubscreen {
           label: getText('mainmenu.button.reset'),
         }
       });
-      layout.appendToMiscDiv(resetButton);
+      misc.append(resetButton);
     }
 
     if (MainMenu.options.importExportSubscreen) {
@@ -159,7 +158,7 @@ export class MainMenu extends BaseSubscreen {
           label: getText('mainmenu.button.import_export'),
         }
       });
-      layout.appendToMiscDiv(importExportButton);
+      misc.append(importExportButton);
     }
 
     if (MainMenu.options.storageFullnessIndicator) {
@@ -199,7 +198,7 @@ export class MainMenu extends BaseSubscreen {
           }
         }
       });
-      layout.appendToMiscDiv(storageFullnessWrapper);
+      misc.append(storageFullnessWrapper);
     }
 
     if (IS_DEBUG || getModule('DebugModule')) {
@@ -245,8 +244,7 @@ export class MainMenu extends BaseSubscreen {
 
   resize(): void {
     super.resize();
-    ElementSetPosition('deeplib-misc', 1905, 930, 'bottom-right');
-    ElementSetSize('deeplib-misc', 405, null);
+    ElementSetSize(BaseSubscreen.ids.misc, 405, null);
   }
 
   static setOptions(mainMenuOptions: MainMenuOptions) {

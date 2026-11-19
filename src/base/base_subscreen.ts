@@ -1,12 +1,11 @@
-import { BaseModule, BaseSettingsModel, GUI, advElement, domUtil, getText, layout, modules, modStorage, exportToGlobal } from '../deeplib';
+import { BaseModule, BaseSettingsModel, GUI, advElement, domUtil, getText, modules, modStorage, exportToGlobal } from '../deeplib';
 import { SettingElement } from './elements_typings';
 
 /** Optional configuration flags for a `BaseSubscreen` instance. */
 export type SubscreenOptions = {
   /**
-   * If `true`, the subscreen will draw the player's character model
-   * in the UI when `run()` is called.
-   * Also shift the UI to the right to make room for the character.
+   * If `true`, the subscreen draws the player on a 500×1000 canvas
+   * in the left aside when `run()` is called.
    */
   drawCharacter?: boolean;
 
@@ -109,6 +108,14 @@ export async function setSubscreen(subscreen: BaseSubscreen | string) {
  *  - May override lifecycle methods as needed
  */
 export abstract class BaseSubscreen {
+  /** IDs for the subscreen elements */
+  static ids = Object.freeze({
+    subscreen: 'deeplib-subscreen',
+    settings: 'deeplib-settings',
+    characterCanvas: 'deeplib-character-canvas',
+    menu: 'deeplib-subscreen-menu',
+    misc: 'deeplib-misc',
+  });
   /** Global registry of currently rendered elements and their definitions. */
   static currentElements: [HTMLElement, SettingElement][] = [];
   /** Tracks the currently visible page number (1-based index). */
@@ -129,8 +136,6 @@ export abstract class BaseSubscreen {
     settingsWidth: 1000,
     forceUpCharacter: false
   };
-  /** The menu at the top of the subscreen */
-  protected static menu: HTMLDivElement | null = null;
 
   constructor(module?: BaseModule) {
     if (module) this.module = module;
@@ -245,12 +250,41 @@ export abstract class BaseSubscreen {
 
     BaseSubscreen.currentPage = 1;
 
-    layout.getSubscreen();
-    const settingsElement = layout.getSettingsDiv();
-    layout.appendToSubscreen(settingsElement);
+    const screen = ElementDOMScreen.getTemplate(BaseSubscreen.ids.subscreen, {
+      hgroupInHeader: true,
+      leftContent: [
+        {
+          tag: 'canvas',
+          attributes: {
+            id: BaseSubscreen.ids.characterCanvas,
+            width: '500',
+            height: '1000',
+            'aria-hidden': 'true',
+            hidden: !this.options.drawCharacter,
+          },
+        }
+      ],
+      mainContent: [
+        {
+          tag: 'div',
+          classList: ['deeplib-settings', 'scroll-box'],
+          attributes: { id: BaseSubscreen.ids.settings },
+        }
+      ],
+      rightContent: [
+        {
+          tag: 'div',
+          classList: ['deeplib-misc'],
+          attributes: { id: BaseSubscreen.ids.misc },
+        }
+      ],
+      parent: document.body,
+    });
+    screen.classList.add('deeplib-subscreen');
 
-    BaseSubscreen.menu = ElementMenu.Create('deeplib-nav-menu', []);
-    layout.appendToSubscreen(BaseSubscreen.menu);
+    const settingsElement = ElementWrap(BaseSubscreen.ids.settings) as HTMLDivElement;
+
+    const menu = ElementWrap(BaseSubscreen.ids.menu) as HTMLDivElement;
 
     if (this.pageStructure.length > 1) {
       const backNext = advElement.createBackNext({
@@ -262,7 +296,7 @@ export abstract class BaseSubscreen {
         initialLabel: this.getPageLabel()
       });
 
-      BaseSubscreen.menu.prepend(backNext);
+      menu.append(backNext);
     }
 
     if (this.options.help) {
@@ -289,17 +323,15 @@ export abstract class BaseSubscreen {
         }
       });
 
-      BaseSubscreen.menu.append(helpButton);
+      menu.append(helpButton);
     }
 
     if (this.options.doShowTitle) {
-      const subscreenTitle = advElement.createLabel({
-        id: 'deeplib-subscreen-title',
-        label: getText(`${this.options.name}.title`, { 
-          '$ModVersion': MOD_VERSION_CAPTION 
-        }),
-      });
-      layout.appendToSubscreen(subscreenTitle);
+      ElementDOMScreen.setHeading(BaseSubscreen.ids.subscreen, getText(`${this.options.name}.title`, {
+        '$ModVersion': MOD_VERSION_CAPTION
+      }));
+    } else {
+      ElementWrap('deeplib-subscreen-hgroup')?.setAttribute('hidden', 'true');
     }
 
     if (this.options.doShowExitButton) {
@@ -314,11 +346,11 @@ export abstract class BaseSubscreen {
           tooltip: getText('settings.button.back_button_hint')
         }
       });
-      BaseSubscreen.menu.append(exitButton);
+      menu.append(exitButton);
     }
 
     const tooltip = advElement.createTooltip();
-    layout.appendToSubscreen(tooltip);
+    ElementWrap(BaseSubscreen.ids.subscreen)?.append(tooltip);
 
     this.pageStructure.forEach((s) =>
       s.forEach((item) => {
@@ -346,7 +378,7 @@ export abstract class BaseSubscreen {
             break;
         }
         if (element.parentElement && element.parentElement !== settingsElement) return;
-        layout.appendToSettingsDiv(element);
+        ElementWrap(BaseSubscreen.ids.settings)?.append(element);
       })
     );
 
@@ -365,7 +397,14 @@ export abstract class BaseSubscreen {
    * Default behavior draws the player's character if `drawCharacter` is enabled.
    */
   run() {
-    if (this.options.drawCharacter) DrawCharacter(Player, 50, 50, 0.9, false);
+    if (!this.options.drawCharacter) return;
+
+    const canvas = ElementWrap(BaseSubscreen.ids.characterCanvas) as HTMLCanvasElement;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    DrawCharacter(Player, 0, 0, 1, false, ctx);
   }
 
   /**
@@ -402,24 +441,25 @@ export abstract class BaseSubscreen {
    * Also checks for overflow in the settings div and applies styling accordingly.
    */
   resize(_onLoad: boolean = false) {
-    const offset = this.options.drawCharacter ? 0 : 380;
-    const subscreen = layout.getSubscreen();
-    const settingsDiv = layout.getSettingsDiv();
 
-    ElementSetPosition(subscreen, 0, 0);
-    ElementSetSize(subscreen, 2000, 1000);
-    ElementSetFontSize(subscreen, 'auto');
+    ElementPositionFixed(BaseSubscreen.ids.subscreen, 50, 70, 1900, 870);
+    ElementSetSize(BaseSubscreen.ids.settings, this.options.settingsWidth ?? 1000, 660);
 
-    ElementSetPosition(settingsDiv, 530 - offset, 170);
-    ElementSetSize(settingsDiv, this.options.settingsWidth ?? 1000 + offset, 660);
-
-    if (this.options.doShowTitle) {
-      ElementSetPosition('deeplib-subscreen-title', 530 - offset, 75);
-      ElementSetSize('deeplib-subscreen-title', 800, 90);
+    if (this.options.drawCharacter) {
+      ElementSetSize(BaseSubscreen.ids.characterCanvas, 400, 800);
     }
 
-    ElementSetPosition('deeplib-nav-menu', 1905, 75, 'top-right');
-    ElementSetSize('deeplib-nav-menu', null, 90);
+    const hgroup = ElementWrap(`${BaseSubscreen.ids.subscreen}-hgroup`);
+    const canvas = ElementWrap(BaseSubscreen.ids.characterCanvas);
+    if (hgroup && canvas && !canvas.hidden && this.options.doShowTitle && this.options.drawCharacter) {
+			
+      const current = parseFloat(hgroup.style.marginLeft) || 0;
+      const origin = hgroup.getBoundingClientRect().left - current;
+      const offset = canvas.getBoundingClientRect().right - origin;
+      hgroup.style.marginLeft = `${Math.max(0, offset)}px`;
+    } else {
+      hgroup?.style.removeProperty('margin-left');
+    }
 
     ElementSetSize(advElement.getTooltip() || '', 1500);
 
@@ -431,6 +471,7 @@ export abstract class BaseSubscreen {
       domUtil.autoSetSize(options.id ?? element.id, options.size);
     });
 
+    const settingsDiv = ElementWrap(BaseSubscreen.ids.settings) as HTMLDivElement;
     if (settingsDiv) {
       if (domUtil.hasOverflow(settingsDiv)?.vertical) {
         settingsDiv.classList.add('deeplib-overflow-box');
@@ -449,7 +490,7 @@ export abstract class BaseSubscreen {
   unload() {
     BaseSubscreen.currentElements = [];
 
-    layout.removeSubscreen();
+    ElementWrap(BaseSubscreen.ids.subscreen)?.remove();
   }
 }
 
